@@ -18,12 +18,22 @@ function loadUserProfile() {
     calories: 1600,
     protein: 105,
     targetMin: 59,
-    targetMax: 64
+    targetMax: 64,
+    foodPrefs: {
+      meat: { chicken: 'like', beef: 'neutral', fish: 'like', shrimp: 'neutral', eggs: 'like', tofu: 'neutral' },
+      veg: { spinach: 'neutral', cucumber: 'like', tomato: 'like', broccoli: 'neutral', lettuce: 'neutral', cauliflower: 'neutral' },
+      staple: { rice: 'like', oats: 'neutral', corn: 'like', sweetpotato: 'like', pumpkin: 'neutral', quinoa: 'neutral' },
+      fruit: { apple: 'like', banana: 'neutral', orange: 'like', grapefruit: 'neutral', strawberry: 'like', blueberry: 'neutral' }
+    }
   };
   try {
     var saved = localStorage.getItem('fit_user_profile');
     if (saved) {
-      return JSON.parse(saved);
+      var parsed = JSON.parse(saved);
+      if (!parsed.foodPrefs) {
+        parsed.foodPrefs = defaultProfile.foodPrefs;
+      }
+      return parsed;
     }
   } catch(e) {}
   return defaultProfile;
@@ -105,6 +115,42 @@ const FIT = {
     url: 'https://wttr.in/Zhuzhou?format=j1',
     cacheKey: 'fit_wx_cache',
     cacheTTL: 30 * 60 * 1000
+  },
+
+  // ============ 食物营养数据库 ============
+  foodDatabase: {
+    meat: {
+      chicken: { name: '鸡胸肉', protein: 24, calories: 110, weight: 100 },
+      beef: { name: '瘦牛肉', protein: 26, calories: 125, weight: 100 },
+      fish: { name: '鱼', protein: 20, calories: 100, weight: 100 },
+      shrimp: { name: '虾', protein: 23, calories: 80, weight: 100 },
+      eggs: { name: '鸡蛋', protein: 6, calories: 75, weight: 1 },
+      tofu: { name: '豆腐', protein: 8, calories: 70, weight: 100 }
+    },
+    veg: {
+      spinach: { name: '菠菜', protein: 3, calories: 25, weight: 100 },
+      cucumber: { name: '黄瓜', protein: 1, calories: 15, weight: 100 },
+      tomato: { name: '西红柿', protein: 1, calories: 20, weight: 100 },
+      broccoli: { name: '西兰花', protein: 3, calories: 34, weight: 100 },
+      lettuce: { name: '生菜', protein: 1, calories: 16, weight: 100 },
+      cauliflower: { name: '菜花', protein: 2, calories: 25, weight: 100 }
+    },
+    staple: {
+      rice: { name: '米饭', protein: 2, calories: 130, weight: 100 },
+      oats: { name: '燕麦', protein: 5, calories: 389, weight: 100 },
+      corn: { name: '玉米', protein: 3, calories: 86, weight: 100 },
+      sweetpotato: { name: '红薯', protein: 1, calories: 86, weight: 100 },
+      pumpkin: { name: '南瓜', protein: 1, calories: 26, weight: 100 },
+      quinoa: { name: '藜麦', protein: 4, calories: 368, weight: 100 }
+    },
+    fruit: {
+      apple: { name: '苹果', protein: 0.3, calories: 52, weight: 100 },
+      banana: { name: '香蕉', protein: 1, calories: 89, weight: 100 },
+      orange: { name: '橙子', protein: 1, calories: 47, weight: 100 },
+      grapefruit: { name: '柚子', protein: 0.7, calories: 42, weight: 100 },
+      strawberry: { name: '草莓', protein: 0.7, calories: 32, weight: 100 },
+      blueberry: { name: '蓝莓', protein: 0.7, calories: 57, weight: 100 }
+    }
   }
 };
 
@@ -842,7 +888,78 @@ function extractTomorrow(d) {
   };
 }
 
+// ============ 个性化饮食方案生成 ============
+function generatePersonalizedDiet() {
+  var prefs = userProfile.foodPrefs || FIT.foodDatabase;
+  
+  function getPreferredItems(category) {
+    var items = [];
+    for (var key in FIT.foodDatabase[category]) {
+      var pref = prefs[category] && prefs[category][key] || 'neutral';
+      if (pref !== 'dislike') {
+        items.push({ key: key, pref: pref, data: FIT.foodDatabase[category][key] });
+      }
+    }
+    items.sort(function(a, b) {
+      if (a.pref === 'like' && b.pref !== 'like') return -1;
+      if (b.pref === 'like' && a.pref !== 'like') return 1;
+      return 0;
+    });
+    return items;
+  }
+  
+  var meatItems = getPreferredItems('meat');
+  var vegItems = getPreferredItems('veg');
+  var stapleItems = getPreferredItems('staple');
+  var fruitItems = getPreferredItems('fruit');
+  
+  var proteinTarget = userProfile.protein || FIT.metrics.protein;
+  var breakfastProtein = Math.round(proteinTarget * 0.27);
+  var lunchProtein = Math.round(proteinTarget * 0.33);
+  var dinnerProtein = Math.round(proteinTarget * 0.40);
+  
+  var mainMeat = meatItems[0] || meatItems[1] || meatItems[2];
+  var altMeat = meatItems.length > 1 ? meatItems[1] : meatItems[0];
+  
+  function calcMeatPortion(proteinNeeded, meat) {
+    if (!meat) return { weight: 0, protein: 0, calories: 0 };
+    var per100g = meat.data.protein;
+    var weight = Math.round((proteinNeeded / per100g) * 100);
+    return {
+      weight: weight,
+      protein: Math.round((weight / 100) * per100g),
+      calories: Math.round((weight / 100) * meat.data.calories),
+      name: meat.data.name
+    };
+  }
+  
+  return {
+    breakfast: {
+      meat: calcMeatPortion(breakfastProtein, { data: { name: '鸡蛋', protein: 6, calories: 75, weight: 1 } }),
+      meatQty: Math.round(breakfastProtein / 6),
+      meatName: '鸡蛋',
+      staple: { name: stapleItems[0].data.name, weight: 30, calories: Math.round((30 / 100) * stapleItems[0].data.calories) },
+      fruit: fruitItems.length > 0 ? fruitItems[0].data.name : '苹果'
+    },
+    lunch: {
+      meat: calcMeatPortion(lunchProtein, mainMeat),
+      staple: { name: stapleItems[0].data.name, weight: 100, calories: Math.round((100 / 100) * stapleItems[0].data.calories) },
+      veg: vegItems.length > 0 ? vegItems[0].data.name : '菠菜'
+    },
+    dinner: {
+      meat: calcMeatPortion(dinnerProtein, altMeat),
+      veg: vegItems.length > 1 ? vegItems[1].data.name : (vegItems[0] ? vegItems[0].data.name : '黄瓜'),
+      carb: { name: stapleItems.length > 1 ? stapleItems[1].data.name : stapleItems[0].data.name, weight: 80, calories: Math.round((80 / 100) * (stapleItems.length > 1 ? stapleItems[1].data.calories : stapleItems[0].data.calories)) }
+    },
+    preferredMeats: meatItems.slice(0, 3).map(function(i) { return i.data.name; }),
+    preferredVegs: vegItems.slice(0, 4).map(function(i) { return i.data.name; }),
+    preferredStaples: stapleItems.slice(0, 3).map(function(i) { return i.data.name; }),
+    preferredFruits: fruitItems.slice(0, 3).map(function(i) { return i.data.name; })
+  };
+}
+
 // 兼容：保持变量名
 if (typeof window !== 'undefined') {
   window.FIT = FIT;
+  window.generatePersonalizedDiet = generatePersonalizedDiet;
 }

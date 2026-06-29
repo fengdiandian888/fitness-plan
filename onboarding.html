@@ -134,6 +134,108 @@
   .bmi-normal { background: #dcfce7; color: #166534; }
   .bmi-overweight { background: #fef3c7; color: #92400e; }
   .bmi-obese { background: #fee2e2; color: #991b1b; }
+
+  .food-category {
+    margin-bottom: 16px;
+  }
+  .food-category h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-strong);
+    margin-bottom: 8px;
+    padding-left: 4px;
+  }
+  .food-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    margin-bottom: 6px;
+    background: var(--card);
+    transition: all 0.2s;
+  }
+  .food-item:hover {
+    border-color: var(--primary);
+  }
+  .food-item.selected-like {
+    border-color: #22c55e;
+    background: #f0fdf4;
+  }
+  .food-item.selected-neutral {
+    border-color: #f59e0b;
+    background: #fffbeb;
+  }
+  .food-item.selected-dislike {
+    border-color: #ef4444;
+    background: #fef2f2;
+  }
+  .food-name {
+    flex: 1;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-strong);
+  }
+  .food-radio {
+    display: flex;
+    gap: 6px;
+  }
+  .food-radio button {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--card);
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .food-radio button:hover {
+    border-color: var(--primary);
+  }
+  .food-radio button.like.selected {
+    background: #22c55e;
+    color: #fff;
+    border-color: #22c55e;
+  }
+  .food-radio button.neutral.selected {
+    background: #f59e0b;
+    color: #fff;
+    border-color: #f59e0b;
+  }
+  .food-radio button.dislike.selected {
+    background: #ef4444;
+    color: #fff;
+    border-color: #ef4444;
+  }
+  .tab-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    background: var(--surface);
+    padding: 4px;
+    border-radius: var(--radius);
+  }
+  .tab-bar button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--sub);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-bar button.active {
+    background: var(--card);
+    color: var(--text-strong);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  }
 </style>
 </head>
 <body>
@@ -147,6 +249,8 @@
     <div class="step-dot active" id="step1"></div>
     <div class="step-dot" id="step2"></div>
     <div class="step-dot" id="step3"></div>
+    <div class="step-dot" id="step4"></div>
+    <div class="step-dot" id="step5"></div>
   </div>
 
   <!-- Step 1: 基本信息 -->
@@ -205,13 +309,17 @@
         <small>增加肌肉量</small>
       </div>
       <div class="radio-option" onclick="selectGoal('maintain')" data-value="maintain">
-        <span>⚖️ 维持</span>
         <small>保持现有状态</small>
       </div>
       <div class="radio-option" onclick="selectGoal('fit')" data-value="fit">
         <span>🏃 塑形</span>
         <small>提升身体素质</small>
       </div>
+    </div>
+    <div class="form-group">
+      <label>目标体重 (kg)</label>
+      <input type="number" id="targetWeight" placeholder="60" min="30" max="200" step="0.1" value="60">
+      <small style="color:var(--sub);font-size:12px;margin-top:4px;display:block">设置你的理想体重目标</small>
     </div>
     <div class="form-group">
       <label>每周训练天数</label>
@@ -232,6 +340,234 @@
     </div>
     <div class="btn-nav">
       <button class="btn btn-secondary" onclick="prevStep(3)">← 返回</button>
+      <button class="btn btn-primary" onclick="nextStep(3)">下一步 →</button>
+    </div>
+  </div>
+
+  <!-- Step 4: 食物偏好 -->
+  <div id="formStep4" class="card" style="display:none">
+    <h3>食物偏好</h3>
+    <div class="tab-bar">
+      <button class="active" onclick="switchFoodTab('meat')">🥩 肉类</button>
+      <button onclick="switchFoodTab('veg')">🥬 蔬菜</button>
+      <button onclick="switchFoodTab('staple')">🍚 主食</button>
+      <button onclick="switchFoodTab('fruit')">🍎 水果</button>
+    </div>
+
+    <div id="foodMeat" class="food-content">
+      <div class="food-category">
+        <div class="food-item" data-category="meat" data-item="chicken">
+          <span class="food-name">鸡胸肉</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('meat', 'chicken', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('meat', 'chicken', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('meat', 'chicken', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="meat" data-item="beef">
+          <span class="food-name">瘦牛肉</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('meat', 'beef', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('meat', 'beef', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('meat', 'beef', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="meat" data-item="fish">
+          <span class="food-name">鱼</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('meat', 'fish', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('meat', 'fish', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('meat', 'fish', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="meat" data-item="shrimp">
+          <span class="food-name">虾</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('meat', 'shrimp', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('meat', 'shrimp', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('meat', 'shrimp', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="meat" data-item="eggs">
+          <span class="food-name">鸡蛋</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('meat', 'eggs', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('meat', 'eggs', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('meat', 'eggs', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="meat" data-item="tofu">
+          <span class="food-name">豆腐</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('meat', 'tofu', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('meat', 'tofu', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('meat', 'tofu', 'dislike')">😕</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="foodVeg" class="food-content" style="display:none">
+      <div class="food-category">
+        <div class="food-item" data-category="veg" data-item="spinach">
+          <span class="food-name">菠菜</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('veg', 'spinach', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('veg', 'spinach', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('veg', 'spinach', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="veg" data-item="cucumber">
+          <span class="food-name">黄瓜</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('veg', 'cucumber', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('veg', 'cucumber', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('veg', 'cucumber', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="veg" data-item="tomato">
+          <span class="food-name">西红柿</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('veg', 'tomato', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('veg', 'tomato', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('veg', 'tomato', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="veg" data-item="broccoli">
+          <span class="food-name">西兰花</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('veg', 'broccoli', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('veg', 'broccoli', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('veg', 'broccoli', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="veg" data-item="lettuce">
+          <span class="food-name">生菜</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('veg', 'lettuce', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('veg', 'lettuce', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('veg', 'lettuce', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="veg" data-item="cauliflower">
+          <span class="food-name">菜花</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('veg', 'cauliflower', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('veg', 'cauliflower', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('veg', 'cauliflower', 'dislike')">😕</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="foodStaple" class="food-content" style="display:none">
+      <div class="food-category">
+        <div class="food-item" data-category="staple" data-item="rice">
+          <span class="food-name">米饭</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('staple', 'rice', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('staple', 'rice', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('staple', 'rice', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="staple" data-item="oats">
+          <span class="food-name">燕麦</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('staple', 'oats', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('staple', 'oats', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('staple', 'oats', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="staple" data-item="corn">
+          <span class="food-name">玉米</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('staple', 'corn', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('staple', 'corn', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('staple', 'corn', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="staple" data-item="sweetpotato">
+          <span class="food-name">红薯</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('staple', 'sweetpotato', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('staple', 'sweetpotato', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('staple', 'sweetpotato', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="staple" data-item="pumpkin">
+          <span class="food-name">南瓜</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('staple', 'pumpkin', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('staple', 'pumpkin', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('staple', 'pumpkin', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="staple" data-item="quinoa">
+          <span class="food-name">藜麦</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('staple', 'quinoa', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('staple', 'quinoa', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('staple', 'quinoa', 'dislike')">😕</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="foodFruit" class="food-content" style="display:none">
+      <div class="food-category">
+        <div class="food-item" data-category="fruit" data-item="apple">
+          <span class="food-name">苹果</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('fruit', 'apple', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('fruit', 'apple', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('fruit', 'apple', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="fruit" data-item="banana">
+          <span class="food-name">香蕉</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('fruit', 'banana', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('fruit', 'banana', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('fruit', 'banana', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="fruit" data-item="orange">
+          <span class="food-name">橙子</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('fruit', 'orange', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('fruit', 'orange', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('fruit', 'orange', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="fruit" data-item="grapefruit">
+          <span class="food-name">柚子</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('fruit', 'grapefruit', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('fruit', 'grapefruit', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('fruit', 'grapefruit', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="fruit" data-item="strawberry">
+          <span class="food-name">草莓</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('fruit', 'strawberry', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('fruit', 'strawberry', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('fruit', 'strawberry', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="fruit" data-item="blueberry">
+          <span class="food-name">蓝莓</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('fruit', 'blueberry', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('fruit', 'blueberry', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('fruit', 'blueberry', 'dislike')">😕</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-nav">
+      <button class="btn btn-secondary" onclick="prevStep(4)">← 返回</button>
       <button class="btn btn-primary" onclick="calculateAndSave()">完成创建 →</button>
     </div>
   </div>
@@ -247,6 +583,10 @@
       <div class="result-row">
         <span class="result-label">当前体重</span>
         <span class="result-value primary"><span id="resWeight">70</span> kg</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">目标体重</span>
+        <span class="result-value primary"><span id="resTarget">60</span> kg</span>
       </div>
       <div class="result-row">
         <span class="result-label">BMI 指数</span>
@@ -276,8 +616,15 @@ var userProfile = {
   age: 25,
   height: 170,
   weight: 70,
+  targetWeight: 60,
   goal: 'lose',
-  days: 5
+  days: 5,
+  foodPrefs: {
+    meat: {},
+    veg: {},
+    staple: {},
+    fruit: {}
+  }
 };
 
 function selectGender(gender) {
@@ -308,6 +655,23 @@ function selectDays(days) {
   userProfile.days = days;
 }
 
+function switchFoodTab(tab) {
+  document.querySelectorAll('.tab-bar button').forEach(function(el) { el.classList.remove('active'); });
+  event.currentTarget.classList.add('active');
+  document.querySelectorAll('.food-content').forEach(function(el) { el.style.display = 'none'; });
+  document.getElementById('food' + tab.charAt(0).toUpperCase() + tab.slice(1)).style.display = 'block';
+}
+
+function setFoodPref(category, item, pref) {
+  userProfile.foodPrefs[category][item] = pref;
+  var el = document.querySelector('.food-item[data-category="' + category + '"][data-item="' + item + '"]');
+  el.classList.remove('selected-like', 'selected-neutral', 'selected-dislike');
+  el.classList.add('selected-' + pref);
+  var buttons = el.querySelectorAll('.food-radio button');
+  buttons.forEach(function(btn) { btn.classList.remove('selected'); });
+  el.querySelector('.food-radio button.' + pref).classList.add('selected');
+}
+
 function nextStep(step) {
   if (step === 1) {
     userProfile.age = parseInt(document.getElementById('age').value) || 25;
@@ -324,6 +688,13 @@ function nextStep(step) {
     document.getElementById('step2').classList.remove('active');
     document.getElementById('step3').classList.add('active');
     currentStep = 3;
+  } else if (step === 3) {
+    userProfile.targetWeight = parseFloat(document.getElementById('targetWeight').value) || Math.round(userProfile.weight * 0.85);
+    document.getElementById('formStep3').style.display = 'none';
+    document.getElementById('formStep4').style.display = 'block';
+    document.getElementById('step3').classList.remove('active');
+    document.getElementById('step4').classList.add('active');
+    currentStep = 4;
   }
 }
 
@@ -340,6 +711,12 @@ function prevStep(step) {
     document.getElementById('step3').classList.remove('active');
     document.getElementById('step2').classList.add('active');
     currentStep = 2;
+  } else if (step === 4) {
+    document.getElementById('formStep4').style.display = 'none';
+    document.getElementById('formStep3').style.display = 'block';
+    document.getElementById('step4').classList.remove('active');
+    document.getElementById('step3').classList.add('active');
+    currentStep = 3;
   }
 }
 
@@ -371,6 +748,7 @@ function calculateAndSave() {
   document.getElementById('resAge').textContent = userProfile.age;
   document.getElementById('resHeight').textContent = userProfile.height;
   document.getElementById('resWeight').textContent = userProfile.weight;
+  document.getElementById('resTarget').textContent = userProfile.targetWeight;
   document.getElementById('resBMI').textContent = bmi.toFixed(1);
   
   var bmiBadge = document.getElementById('bmiBadge');
@@ -394,11 +772,11 @@ function calculateAndSave() {
   document.getElementById('resCalories').textContent = calories;
   document.getElementById('resProtein').textContent = protein;
   
-  document.getElementById('formStep3').style.display = 'none';
+  document.getElementById('formStep4').style.display = 'none';
   document.getElementById('resultPreview').style.display = 'block';
   
-  var targetMin = Math.round(userProfile.weight * 0.85);
-  var targetMax = Math.round(userProfile.weight * 0.92);
+  var targetMin = userProfile.targetWeight;
+  var targetMax = Math.round(userProfile.targetWeight * 1.05);
   
   localStorage.setItem('fit_user_profile', JSON.stringify({
     gender: userProfile.gender,
@@ -413,7 +791,8 @@ function calculateAndSave() {
     calories: calories,
     protein: protein,
     targetMin: targetMin,
-    targetMax: targetMax
+    targetMax: targetMax,
+    foodPrefs: userProfile.foodPrefs
   }));
   
   localStorage.setItem('fit_onboarding_done', 'true');

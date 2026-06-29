@@ -136,69 +136,130 @@
   <!-- 饮食参考 -->
   <div id="tab-diet" class="content-section active">
     <section class="card">
-      <h3>🍳 早餐推荐</h3>
-      <div class="ref-food-row">
-        <div class="ref-food-icon">🥚</div>
-        <div class="ref-food-info">
-          <div class="ref-food-title">水煮蛋 + 全麦面包</div>
-          <div class="ref-food-desc">2个鸡蛋 + 2片全麦面包 + 一杯牛奶</div>
-        </div>
+      <div class="flex-between">
+        <h3>📊 你的每日营养目标</h3>
+        <span class="badge" style="background:#f97316;color:#fff">个性化方案</span>
       </div>
-      <div class="ref-food-row">
-        <div class="ref-food-icon">🥛</div>
-        <div class="ref-food-info">
-          <div class="ref-food-title">蛋白质奶昔</div>
-          <div class="ref-food-desc">蛋白粉一勺 + 香蕉一根 + 牛奶</div>
+      <div class="grid-3" style="gap:10px;margin-top:10px">
+        <div style="background:#fef3c7;padding:12px;border-radius:var(--radius-sm)">
+          <div style="font-size:11px;color:#92400e">每日热量</div>
+          <div style="font-size:20px;font-weight:700;color:#d97706" id="dailyCalories">1600</div>
+          <div style="font-size:10px;color:#b45309">千卡</div>
         </div>
-      </div>
-      <div class="ref-food-row">
-        <div class="ref-food-icon">🥗</div>
-        <div class="ref-food-info">
-          <div class="ref-food-title">燕麦碗</div>
-          <div class="ref-food-desc">燕麦50g + 酸奶200ml + 坚果一小把</div>
+        <div style="background:#dbeafe;padding:12px;border-radius:var(--radius-sm)">
+          <div style="font-size:11px;color:#1e40af">蛋白质</div>
+          <div style="font-size:20px;font-weight:700;color:#2563eb" id="dailyProtein">105</div>
+          <div style="font-size:10px;color:#1d4ed8">克</div>
         </div>
-      </div>
-    </section>
-
-    <section class="card">
-      <h3>🍖 午餐推荐</h3>
-      <div class="ref-food-row">
-        <div class="ref-food-icon">🍗</div>
-        <div class="ref-food-info">
-          <div class="ref-food-title">鸡胸肉套餐</div>
-          <div class="ref-food-desc">鸡胸肉200g + 糙米100g + 蔬菜200g</div>
-        </div>
-      </div>
-      <div class="ref-food-row">
-        <div class="ref-food-icon">🥩</div>
-        <div class="ref-food-info">
-          <div class="ref-food-title">瘦牛肉套餐</div>
-          <div class="ref-food-desc">瘦牛肉180g + 红薯100g + 西兰花</div>
-        </div>
-      </div>
-      <div class="ref-food-row">
-        <div class="ref-food-icon">🐟</div>
-        <div class="ref-food-info">
-          <div class="ref-food-title">鱼虾套餐</div>
-          <div class="ref-food-desc">三文鱼150g + 玉米半根 + 菠菜</div>
+        <div style="background:#dcfce7;padding:12px;border-radius:var(--radius-sm)">
+          <div style="font-size:11px;color:#166534">饮水量</div>
+          <div style="font-size:20px;font-weight:700;color:#22c55e" id="dailyWater">2.5</div>
+          <div style="font-size:10px;color:#15803d">升</div>
         </div>
       </div>
     </section>
 
     <section class="card">
-      <h3>🥗 晚餐推荐</h3>
-      <div class="ref-food-row">
-        <div class="ref-food-icon">🥦</div>
-        <div class="ref-food-info">
-          <div class="ref-food-title">蔬菜鸡胸沙拉</div>
-          <div class="ref-food-desc">鸡胸肉150g + 黄瓜/西红柿/生菜</div>
+      <h3>🍳 早餐</h3>
+      <div id="breakfastContent">
+        <div class="ref-food-row">
+          <div class="ref-food-icon">🥚</div>
+          <div class="ref-food-info">
+            <div class="ref-food-title">鸡蛋</div>
+            <div class="ref-food-desc">3个（蛋白质约18g）</div>
+          </div>
+        </div>
+        <div class="ref-food-row">
+          <div class="ref-food-icon">🥛</div>
+          <div class="ref-food-info">
+            <div class="ref-food-title">牛奶</div>
+            <div class="ref-food-desc">250ml</div>
+          </div>
         </div>
       </div>
-      <div class="ref-food-row">
-        <div class="ref-food-icon">🥑</div>
-        <div class="ref-food-info">
-          <div class="ref-food-title">牛油果虾仁</div>
-          <div class="ref-food-desc">虾仁150g + 牛油果半个 + 水煮蛋</div>
+      <div style="margin-top:10px;padding:8px;background:#f3f4f6;border-radius:var(--radius-sm);font-size:12px;color:var(--sub)">
+        💡 早餐蛋白质占比 27%，唤醒新陈代谢
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>🍖 午餐</h3>
+      <div id="lunchContent">
+        <div class="ref-food-row">
+          <div class="ref-food-icon">🍗</div>
+          <div class="ref-food-info">
+            <div class="ref-food-title">鸡胸肉</div>
+            <div class="ref-food-desc">150g（蛋白质约36g）</div>
+          </div>
+        </div>
+        <div class="ref-food-row">
+          <div class="ref-food-icon">🍚</div>
+          <div class="ref-food-info">
+            <div class="ref-food-title">米饭</div>
+            <div class="ref-food-desc">100g</div>
+          </div>
+        </div>
+        <div class="ref-food-row">
+          <div class="ref-food-icon">🥬</div>
+          <div class="ref-food-info">
+            <div class="ref-food-title">蔬菜</div>
+            <div class="ref-food-desc">200g</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:10px;padding:8px;background:#f3f4f6;border-radius:var(--radius-sm);font-size:12px;color:var(--sub)">
+        💡 午餐蛋白质占比 33%，补充能量应对下午
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>🥗 晚餐</h3>
+      <div id="dinnerContent">
+        <div class="ref-food-row">
+          <div class="ref-food-icon">🐟</div>
+          <div class="ref-food-info">
+            <div class="ref-food-title">鱼</div>
+            <div class="ref-food-desc">200g（蛋白质约40g）</div>
+          </div>
+        </div>
+        <div class="ref-food-row">
+          <div class="ref-food-icon">🥦</div>
+          <div class="ref-food-info">
+            <div class="ref-food-title">蔬菜</div>
+            <div class="ref-food-desc">300g</div>
+          </div>
+        </div>
+        <div class="ref-food-row">
+          <div class="ref-food-icon">🌽</div>
+          <div class="ref-food-info">
+            <div class="ref-food-title">玉米</div>
+            <div class="ref-food-desc">半根（约80g）</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:10px;padding:8px;background:#f3f4f6;border-radius:var(--radius-sm);font-size:12px;color:var(--sub)">
+        💡 晚餐蛋白质占比 40%，睡前修复肌肉
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>🎯 你的偏好食材</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div>
+          <div style="font-size:12px;color:var(--sub);margin-bottom:4px">🥩 肉类偏好</div>
+          <div style="font-size:13px;color:var(--text-strong)" id="prefMeats">鸡胸肉、鱼、鸡蛋</div>
+        </div>
+        <div>
+          <div style="font-size:12px;color:var(--sub);margin-bottom:4px">🥬 蔬菜偏好</div>
+          <div style="font-size:13px;color:var(--text-strong)" id="prefVegs">黄瓜、西红柿、菠菜</div>
+        </div>
+        <div>
+          <div style="font-size:12px;color:var(--sub);margin-bottom:4px">🍚 主食偏好</div>
+          <div style="font-size:13px;color:var(--text-strong)" id="prefStaples">米饭、玉米、红薯</div>
+        </div>
+        <div>
+          <div style="font-size:12px;color:var(--sub);margin-bottom:4px">🍎 水果偏好</div>
+          <div style="font-size:13px;color:var(--text-strong)" id="prefFruits">苹果、橙子、草莓</div>
         </div>
       </div>
     </section>
@@ -359,17 +420,17 @@
   document.getElementById('sleepTarget').textContent = FIT.metrics.sleepHours;
   document.getElementById('dailyWater').textContent = FIT.metrics.water;
 
-  function switchTab(tab) {
+  window.switchTab = function(tab) {
     document.querySelectorAll('.content-tab-btn').forEach(function(el) { el.classList.remove('active'); });
     document.querySelectorAll('.content-section').forEach(function(el) { el.classList.remove('active'); });
     event.currentTarget.classList.add('active');
     document.getElementById('tab-' + tab).classList.add('active');
-  }
+  };
 
   var checkedItems = [];
   try { checkedItems = JSON.parse(localStorage.getItem('fit_checklist') || '[]'); } catch(e) {}
   
-  function toggleCheck(idx) {
+  window.toggleCheck = function(idx) {
     if (checkedItems[idx]) {
       checkedItems[idx] = false;
     } else {
@@ -377,7 +438,7 @@
     }
     localStorage.setItem('fit_checklist', JSON.stringify(checkedItems));
     updateChecklist();
-  }
+  };
 
   function updateChecklist() {
     var items = document.querySelectorAll('.check-item');
@@ -393,11 +454,11 @@
     document.getElementById('checkProgress').textContent = count + '/' + items.length;
   }
 
-  function resetChecklist() {
+  window.resetChecklist = function() {
     checkedItems = [];
     localStorage.setItem('fit_checklist', '[]');
     updateChecklist();
-  }
+  };
 
   updateChecklist();
 
@@ -471,16 +532,106 @@
   try { weekNotes = localStorage.getItem('fit_week_notes') || ''; } catch(e) {}
   document.getElementById('weekNotes').value = weekNotes;
 
-  function saveWeekNotes() {
+  window.saveWeekNotes = function() {
     var notes = document.getElementById('weekNotes').value;
     localStorage.setItem('fit_week_notes', notes);
     toast('笔记保存成功');
-  }
+  };
 
-  function editProfile() {
+  window.editProfile = function() {
     localStorage.removeItem('fit_onboarding_done');
     window.location.href = 'onboarding.html';
+  };
+
+  function renderPersonalizedDiet() {
+    var diet = generatePersonalizedDiet();
+    
+    document.getElementById('dailyCalories').textContent = FIT.metrics.calories;
+    document.getElementById('dailyProtein').textContent = FIT.metrics.protein;
+    document.getElementById('dailyWater').textContent = FIT.metrics.water;
+    
+    var breakfastHtml = 
+      '<div class="ref-food-row">' +
+        '<div class="ref-food-icon">🥚</div>' +
+        '<div class="ref-food-info">' +
+          '<div class="ref-food-title">' + diet.breakfast.meatName + '</div>' +
+          '<div class="ref-food-desc">' + diet.breakfast.meatQty + '个（蛋白质约' + (diet.breakfast.meatQty * 6) + 'g）</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="ref-food-row">' +
+        '<div class="ref-food-icon">🥛</div>' +
+        '<div class="ref-food-info">' +
+          '<div class="ref-food-title">牛奶</div>' +
+          '<div class="ref-food-desc">250ml</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="ref-food-row">' +
+        '<div class="ref-food-icon">🍞</div>' +
+        '<div class="ref-food-info">' +
+          '<div class="ref-food-title">' + diet.breakfast.staple.name + '</div>' +
+          '<div class="ref-food-desc">' + diet.breakfast.staple.weight + 'g</div>' +
+        '</div>' +
+      '</div>';
+    
+    document.getElementById('breakfastContent').innerHTML = breakfastHtml;
+    
+    var lunchHtml = 
+      '<div class="ref-food-row">' +
+        '<div class="ref-food-icon">🍗</div>' +
+        '<div class="ref-food-info">' +
+          '<div class="ref-food-title">' + diet.lunch.meat.name + '</div>' +
+          '<div class="ref-food-desc">' + diet.lunch.meat.weight + 'g（蛋白质约' + diet.lunch.meat.protein + 'g）</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="ref-food-row">' +
+        '<div class="ref-food-icon">🍚</div>' +
+        '<div class="ref-food-info">' +
+          '<div class="ref-food-title">' + diet.lunch.staple.name + '</div>' +
+          '<div class="ref-food-desc">' + diet.lunch.staple.weight + 'g</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="ref-food-row">' +
+        '<div class="ref-food-icon">🥬</div>' +
+        '<div class="ref-food-info">' +
+          '<div class="ref-food-title">' + diet.lunch.veg + '</div>' +
+          '<div class="ref-food-desc">200g</div>' +
+        '</div>' +
+      '</div>';
+    
+    document.getElementById('lunchContent').innerHTML = lunchHtml;
+    
+    var dinnerHtml = 
+      '<div class="ref-food-row">' +
+        '<div class="ref-food-icon">🐟</div>' +
+        '<div class="ref-food-info">' +
+          '<div class="ref-food-title">' + diet.dinner.meat.name + '</div>' +
+          '<div class="ref-food-desc">' + diet.dinner.meat.weight + 'g（蛋白质约' + diet.dinner.meat.protein + 'g）</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="ref-food-row">' +
+        '<div class="ref-food-icon">🥦</div>' +
+        '<div class="ref-food-info">' +
+          '<div class="ref-food-title">' + diet.dinner.veg + '</div>' +
+          '<div class="ref-food-desc">300g</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="ref-food-row">' +
+        '<div class="ref-food-icon">🌽</div>' +
+        '<div class="ref-food-info">' +
+          '<div class="ref-food-title">' + diet.dinner.carb.name + '</div>' +
+          '<div class="ref-food-desc">' + diet.dinner.carb.weight + 'g</div>' +
+        '</div>' +
+      '</div>';
+    
+    document.getElementById('dinnerContent').innerHTML = dinnerHtml;
+    
+    document.getElementById('prefMeats').textContent = diet.preferredMeats.join('、');
+    document.getElementById('prefVegs').textContent = diet.preferredVegs.join('、');
+    document.getElementById('prefStaples').textContent = diet.preferredStaples.join('、');
+    document.getElementById('prefFruits').textContent = diet.preferredFruits.join('、');
   }
+
+  renderPersonalizedDiet();
 })();
 </script>
 </body>
