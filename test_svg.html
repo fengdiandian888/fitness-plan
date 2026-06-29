@@ -1,0 +1,35 @@
+// 简单测试：直接尝试渲染一个 SVG 到 HTML
+(function () {
+  // 检查是否能正常调用
+  if (typeof getExerciseSVG === 'undefined') {
+    document.body.innerHTML = '<h1 style="color:red;">ERROR: getExerciseSVG not found</h1>';
+    return;
+  }
+  
+  const testActions = [
+    '哑铃俯身划船',
+    '哑铃深蹲',
+    '哑铃卧推',
+    '弹力带肩外旋',
+    '平板支撑',
+    '哑铃弯举'
+  ];
+  
+  let html = '<h1 style="text-align:center;color:#1e40af;">动作示意图测试</h1>';
+  html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;padding:20px;">';
+  
+  testActions.forEach((name, i) => {
+    const svg = getExerciseSVG(name);
+    html += '<div style="border:1px solid #e2e8f0;border-radius:10px;padding:15px;background:#fff;">' +
+              '<div style="text-align:center;font-weight:600;font-size:16px;color:#334155;margin-bottom:10px;">' +
+                (i + 1) + '. ' + name +
+              '</div>' +
+              '<div style="text-align:center;background:#f8fafc;padding:10px;border-radius:8px;">' +
+                svg +
+              '</div>' +
+            '</div>';
+  });
+  
+  html += '</div>';
+  document.body.innerHTML = html;
+})();

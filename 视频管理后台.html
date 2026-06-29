@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>视频管理后台</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #F5F5F5;
+    color: #333;
+    min-height: 100vh;
+  }
+
+  .admin-header {
+    background: linear-gradient(135deg, #6B8E8B, #8BA8A4);
+    color: #FFFFFF;
+    padding: 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .admin-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .admin-subtitle {
+    font-size: 12px;
+    opacity: 0.85;
+  }
+
+  .admin-tabs {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .admin-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .admin-tab {
+    padding: 6px 14px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    font-size: 13px;
+    cursor: pointer;
+    white-space: nowrap;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .admin-tab.active {
+    background: #FFFFFF;
+    color: #6B8E8B;
+    font-weight: 500;
+  }
+
+  .admin-content {
+    padding: 16px;
+  }
+
+  .section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 12px;
+    padding-left: 4px;
+  }
+
+  .move-item {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+
+  .move-item-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .move-num {
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, #6B8E8B, #8BA8A4);
+    color: #FFFFFF;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .move-name {
+    font-size: 15px;
+    font-weight: 500;
+    color: #333;
+    flex: 1;
+    word-break: break-word;
+  }
+
+  .move-meta {
+    font-size: 12px;
+    color: #999;
+    flex-shrink: 0;
+  }
+
+  .drop-zone {
+    border: 2px dashed #D0D0D0;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #FAFAFA;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .drop-zone:hover, .drop-zone.dragover {
+    border-color: #6B8E8B;
+    background: #F0F5F4;
+  }
+
+  .drop-zone.has-video {
+    border-color: #8BA8A4;
+    background: #F0F5F4;
+  }
+
+  .drop-zone-icon {
+    font-size: 32px;
+    margin-bottom: 8px;
+    opacity: 0.5;
+  }
+
+  .drop-zone-text {
+    font-size: 13px;
+    color: #999;
+  }
+
+  .drop-zone-hint {
+    font-size: 11px;
+    color: #CCC;
+    margin-top: 4px;
+  }
+
+  .video-preview {
+    width: 100%;
+    max-height: 200px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+
+  .video-controls {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .btn {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    flex: 1;
+  }
+
+  .btn-save {
+    background: linear-gradient(135deg, #6B8E8B, #8BA8A4);
+    color: #FFFFFF;
+  }
+
+  .btn-delete {
+    background: #F5F5F5;
+    color: #E74C3C;
+    border: 1px solid #E74C3C;
+  }
+
+  .btn-preview {
+    background: #F0F5F4;
+    color: #6B8E8B;
+    border: 1px solid #8BA8A4;
+  }
+
+  .btn:active {
+    transform: scale(0.96);
+  }
+
+  .admin-footer {
+    padding: 20px;
+    text-align: center;
+    color: #999;
+    font-size: 12px;
+  }
+
+  .back-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #FFFFFF;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-top: 8px;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #999;
+  }
+
+  .empty-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+  }
+
+  .preview-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .preview-modal {
+    width: 100%;
+    max-width: 600px;
+    background: #FFFFFF;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, #6B8E8B, #8BA8A4);
+    color: #FFFFFF;
+  }
+
+  .preview-title {
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  .preview-close {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: #FFFFFF;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .preview-content {
+    padding: 0;
+    background: #000;
+  }
+
+  .preview-video {
+    width: 100%;
+    max-height: 400px;
+    border: none;
+  }
+
+  .stats-bar {
+    display: flex;
+    gap: 16px;
+    padding: 12px 16px;
+    background: #FFFFFF;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+
+  .stat-item {
+    flex: 1;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-size: 20px;
+    font-weight: 600;
+    color: #6B8E8B;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: #999;
+    margin-top: 2px;
+  }
+</style>
+</head>
+<body>
+
+<div class="admin-header">
+  <div class="admin-title">🎬 视频管理后台</div>
+  <div class="admin-subtitle">拖拽视频文件到对应动作，数据保存在本地</div>
+  <a href="减脂训练日跟练_三分化.html" class="back-btn">← 返回训练页</a>
+</div>
+
+<div class="admin-content">
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-num" id="totalMoves">0</div>
+      <div class="stat-label">总动作数</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" id="videoCount">0</div>
+      <div class="stat-label">已添加视频</div>
+    </div>
+  </div>
+  <div id="moveList"></div>
+</div>
+
+<div class="preview-overlay" id="previewOverlay" style="display:none;" onclick="closePreview()">
+  <div class="preview-modal" onclick="event.stopPropagation()">
+    <div class="preview-header">
+      <div class="preview-title" id="previewTitle">视频预览</div>
+      <button class="preview-close" onclick="closePreview()">×</button>
+    </div>
+    <div class="preview-content">
+      <video id="previewVideoElement" class="preview-video" controls playsinline></video>
+    </div>
+  </div>
+</div>
+
+<script src="data.js"></script>
+
+<script>
+  const STORAGE_KEY = 'fitness_videos';
+  const MAX_VIDEO_SIZE = 50 * 1024 * 1024; // 50MB限制
+
+  function loadVideoData() {
+    try {
+      const data = localStorage.getItem(STORAGE_KEY);
+      return data ? JSON.parse(data) : {};
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function saveVideoData(data) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    } catch (e) {
+      alert('存储空间不足，请清理浏览器缓存后重试');
+    }
+  }
+
+  function getAllMoves() {
+    const moves = [];
+    
+    // 收集早晨训练动作
+    if (FIT.weekly) {
+      FIT.weekly.forEach(function(day) {
+        if (day.morning && day.morning.items) {
+          day.morning.items.forEach(function(item) {
+            if (typeof item === 'string') {
+              moves.push({ name: item, category: day.morning.title, source: 'morning' });
+            }
+          });
+        }
+      });
+    }
+    
+    // 收集晚间训练动作
+    if (FIT.plans) {
+      Object.keys(FIT.plans).forEach(function(key) {
+        const plan = FIT.plans[key];
+        if (plan.moves) {
+          plan.moves.forEach(function(move) {
+            if (typeof move === 'string') {
+              moves.push({ name: move, category: plan.title, source: 'plan' });
+            } else if (move && move.name) {
+              moves.push({ name: move.name, category: plan.title, source: 'plan' });
+            }
+          });
+        }
+      });
+    }
+    
+    // 去重
+    const seen = {};
+    return moves.filter(function(m) {
+      if (seen[m.name]) return false;
+      seen[m.name] = true;
+      return true;
+    });
+  }
+
+  function handleDrop(e, moveName) {
+    e.preventDefault();
+    e.stopPropagation();
+    e.currentTarget.classList.remove('dragover');
+    
+    const files = e.dataTransfer.files;
+    if (files.length === 0) return;
+    
+    const file = files[0];
+    if (!file.type.startsWith('video/')) {
+      alert('请上传视频文件');
+      return;
+    }
+    
+    if (file.size > MAX_VIDEO_SIZE) {
+      alert('视频文件过大（最大50MB），请压缩后再试');
+      return;
+    }
+    
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      const videoData = {
+        blob: event.target.result,
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        time: Date.now()
+      };
+      
+      const data = loadVideoData();
+      data[moveName] = videoData;
+      saveVideoData(data);
+      
+      renderMoveList();
+      updateStats();
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function handleDragOver(e) {
+    e.preventDefault();
+    e.currentTarget.classList.add('dragover');
+  }
+
+  function handleDragLeave(e) {
+    e.currentTarget.classList.remove('dragover');
+  }
+
+  function deleteVideo(moveName) {
+    if (!confirm('确定删除这个视频吗？')) return;
+    
+    const data = loadVideoData();
+    delete data[moveName];
+    saveVideoData(data);
+    
+    renderMoveList();
+    updateStats();
+  }
+
+  function previewVideo(moveName) {
+    const data = loadVideoData();
+    const video = data[moveName];
+    if (!video) return;
+    
+    document.getElementById('previewTitle').textContent = moveName;
+    document.getElementById('previewVideoElement').src = video.blob;
+    document.getElementById('previewOverlay').style.display = 'flex';
+  }
+
+  function closePreview() {
+    document.getElementById('previewVideoElement').pause();
+    document.getElementById('previewOverlay').style.display = 'none';
+  }
+
+  function formatFileSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+  }
+
+  function updateStats() {
+    const allMoves = getAllMoves();
+    const videoData = loadVideoData();
+    const videoCount = Object.keys(videoData).length;
+    
+    document.getElementById('totalMoves').textContent = allMoves.length;
+    document.getElementById('videoCount').textContent = videoCount;
+  }
+
+  function renderMoveList() {
+    const container = document.getElementById('moveList');
+    const allMoves = getAllMoves();
+    const videoData = loadVideoData();
+    
+    if (allMoves.length === 0) {
+      container.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div>暂无动作数据</div></div>';
+      return;
+    }
+    
+    let html = '';
+    
+    // 按分类分组
+    const grouped = {};
+    allMoves.forEach(function(m) {
+      if (!grouped[m.category]) {
+        grouped[m.category] = [];
+      }
+      grouped[m.category].push(m);
+    });
+    
+    Object.keys(grouped).forEach(function(category) {
+      html += '<div class="section-title">' + category + '（' + grouped[category].length + '个动作）</div>';
+      
+      grouped[category].forEach(function(move, index) {
+        const video = videoData[move.name];
+        const hasVideo = !!video;
+        
+        html += '<div class="move-item">' +
+                '<div class="move-item-header">' +
+                '<div class="move-num">' + (index + 1) + '</div>' +
+                '<div class="move-name">' + move.name + '</div>' +
+                '</div>' +
+                
+                '<div class="drop-zone ' + (hasVideo ? 'has-video' : '') + '" ' +
+                'id="drop-' + index + '" ' +
+                'ondrop="handleDrop(event, \'' + move.name.replace(/'/g, "\\'") + '\')" ' +
+                'ondragover="handleDragOver(event)" ' +
+                'ondragleave="handleDragLeave(event)">';
+        
+        if (hasVideo) {
+          html += '<div style="width:100%;text-align:center;">' +
+                  '<div style="font-size:13px;color:#6B8E8B;font-weight:500;">✓ 已添加视频</div>' +
+                  '<div style="font-size:11px;color:#999;margin-top:4px;">' + video.name + '（' + formatFileSize(video.size) + '）</div>' +
+                  '</div>';
+        } else {
+          html += '<div class="drop-zone-icon">📹</div>' +
+                  '<div class="drop-zone-text">拖拽视频到这里</div>' +
+                  '<div class="drop-zone-hint">或点击选择文件</div>';
+        }
+        
+        html += '</div>';
+        
+        if (hasVideo) {
+          html += '<div class="video-controls">' +
+                  '<button class="btn btn-preview" onclick="previewVideo(\'' + move.name.replace(/'/g, "\\'") + '\')">▶️ 预览</button>' +
+                  '<button class="btn btn-delete" onclick="deleteVideo(\'' + move.name.replace(/'/g, "\\'") + '\')">🗑️ 删除</button>' +
+                  '</div>';
+        }
+        
+        html += '</div>';
+      });
+    });
+    
+    container.innerHTML = html;
+  }
+
+  // 点击选择文件
+  document.addEventListener('click', function(e) {
+    const dropZone = e.target.closest('.drop-zone');
+    if (dropZone && !dropZone.classList.contains('has-video')) {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'video/*';
+      input.onchange = function() {
+        if (input.files.length > 0) {
+          const dt = new DataTransfer();
+          dt.items.add(input.files[0]);
+          const fakeEvent = {
+            preventDefault: function() {},
+            stopPropagation: function() {},
+            dataTransfer: dt,
+            currentTarget: dropZone
+          };
+          const moveName = dropZone.id.replace('drop-', '');
+          const allMoves = getAllMoves();
+          if (allMoves[parseInt(moveName)]) {
+            handleDrop(fakeEvent, allMoves[parseInt(moveName)].name);
+          }
+        }
+      };
+      input.click();
+    }
+  });
+
+  window.handleDrop = handleDrop;
+  window.handleDragOver = handleDragOver;
+  window.handleDragLeave = handleDragLeave;
+  window.previewVideo = previewVideo;
+  window.closePreview = closePreview;
+  window.deleteVideo = deleteVideo;
+
+  updateStats();
+  renderMoveList();
+</script>
+
+</body>
+</html>

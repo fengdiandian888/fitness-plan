@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#FAF8F8">
+<title>每日必做清单 · 减脂</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+.day-full {
+  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+  margin-bottom: 8px; overflow: hidden;
+}
+.day-full.pull { border-left: 3px solid var(--pull); }
+.day-full.push { border-left: 3px solid var(--push); }
+.day-full.leg { border-left: 3px solid var(--leg); }
+.day-full.cardio { border-left: 3px solid var(--cardio); }
+.day-full.recovery { border-left: 3px solid var(--recovery); }
+.day-full-header {
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+  background: var(--surface); border-bottom: 1px solid var(--border);
+}
+.day-full-header .dfd { font-size: 12px; color: var(--sub); min-width: 32px; font-weight: 600; }
+.day-full-header .dfn { font-size: 18px; font-weight: 700; flex: 1; }
+.day-full-header .dfb { font-size: 12px; padding: 2px 8px; border-radius: 6px; font-weight: 700; }
+.dfb-pull { background: rgba(139,155,168,.15); color: var(--pull); }
+.dfb-push { background: rgba(196,168,139,.15); color: var(--push); }
+.dfb-leg { background: rgba(168,139,139,.15); color: var(--danger); }
+.dfb-cardio { background: rgba(155,168,155,.15); color: var(--cardio); }
+.dfb-recovery { background: rgba(168,155,168,.15); color: var(--recovery); }
+.day-full-body { padding: 10px 12px; display: grid; gap: 6px; }
+.day-slot {
+  display: flex; gap: 8px; align-items: flex-start; font-size: 14px;
+  padding: 8px 10px; border-radius: 6px; line-height: 1.5;
+}
+.day-slot.morning { background: rgba(196,168,139,0.04); border: 1px solid rgba(196,168,139,0.08); }
+.day-slot.evening { background: rgba(139,155,168,0.04); border: 1px solid rgba(139,155,168,0.08); }
+.day-slot .ds-icon { font-size: 16px; flex-shrink: 0; }
+.day-slot .ds-txt { flex: 1; }
+.day-slot .ds-txt b { font-size: 14px; font-weight: 700; display: block; margin-bottom: 2px; }
+.day-slot .ds-txt span { font-size: 13px; color: var(--sub); }
+
+.warn-box {
+  background: rgba(196,168,139,.06); border: 1px solid rgba(196,168,139,.15);
+  border-radius: var(--radius); padding: 10px 14px; font-size: 15px; font-weight: 500; margin: 8px 0; line-height: 1.6;
+}
+.warn-box strong { color: var(--warn); font-weight: 700; }
+
+.step-list { list-style: none; }
+.step-list li {
+  display: flex; align-items: center; gap: 8px; padding: 8px 0;
+  border-bottom: 1px solid var(--border); font-size: 16px; font-weight: 500;
+}
+.step-list li:last-child { border-bottom: none; }
+.step-list .step-num {
+  min-width: 22px; height: 22px; border-radius: 50%; background: var(--surface);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; color: var(--sub);
+}
+
+.shoulder-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px; }
+.shoulder-col { border-radius: var(--radius-sm); padding: 10px; font-size: 14px; line-height: 1.6; font-weight: 500; }
+.shoulder-col.no { background: #fef2f2; border: 1px solid rgba(239,68,68,0.15); }
+.shoulder-col.yes { background: #f0fdf4; border: 1px solid rgba(34,197,94,0.15); }
+.shoulder-col h4 { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
+.shoulder-col.no h4 { color: var(--danger); }
+.shoulder-col.yes h4 { color: var(--success); }
+.shoulder-col li { padding: 2px 0; color: var(--sub); list-style: none; }
+</style>
+</head>
+<body>
+<script>window.PAGE_META = { key: 'checklist', dark: false, title: '必做清单' };</script>
+
+<div class="container">
+
+<h1 class="page-title">每日必做清单</h1>
+<p style="font-size: 15px;color:var(--sub);margin-bottom:16px">83.25kg → 63-70kg · 40岁男 · 170cm · 一天两练</p>
+
+<div class="card">
+ <h2>每日核心数字</h2>
+ <div class="grid-4" style="margin-top:8px">
+ <div class="metric-box primary"><span class="metric-val">100g</span><span class="metric-label">蛋白质</span></div>
+ <div class="metric-box water"><span class="metric-val">2.5L</span><span class="metric-label">饮水</span></div>
+ <div class="metric-box exercise"><span class="metric-val">90′</span><span class="metric-label">运动时间</span></div>
+ <div class="metric-box sleep"><span class="metric-val">7h</span><span class="metric-label">睡眠</span></div>
+ </div>
+</div>
+
+<div class="card">
+ <h2>蛋白质来源分解（全天 ~100g）</h2>
+ <table class="simple-table">
+ <tr><th>餐次</th><th>食物</th><th>蛋白</th><th>时间</th></tr>
+ <tr><td>早餐</td><td>3全蛋 + 牛奶 + 麦片</td><td><b style="color:var(--success)">27g</b></td><td>9:00</td></tr>
+ <tr><td>午餐</td><td>公司盒饭（米饭减半，选蒸煮）</td><td><b style="color:var(--success)">~20g</b></td><td>12:00</td></tr>
+ <tr><td>晚餐</td><td>鸡胸肉/牛肉 240g + 蔬菜300g + 碳水</td><td><b style="color:var(--success)">53g</b></td><td>19:00</td></tr>
+ <tr style="background:rgba(196,164,164,0.05)"><td colspan="2"><b>全天合计</b></td><td><b>100g</b></td><td></td></tr>
+ </table>
+</div>
+
+<div class="card">
+ <h2>饮水计划（5次 × 400ml + 晚餐200ml = 2.2-2.8L）</h2>
+ <table class="simple-table">
+ <tr><th>时段</th><th>量</th><th>说明</th></tr>
+ <tr><td>09:30</td><td>400ml</td><td>早餐后第一杯</td></tr>
+ <tr><td>11:30</td><td>400ml</td><td>午餐前</td></tr>
+ <tr><td>13:30</td><td>400ml</td><td>午后（散步后）</td></tr>
+ <tr><td>15:30</td><td>400ml</td><td>下午 · 不喝咖啡</td></tr>
+ <tr><td>17:30</td><td>400ml</td><td>下班前 20:00后不喝水</td></tr>
+ <tr><td>19:00</td><td>200ml</td><td>晚餐随餐</td></tr>
+ </table>
+</div>
+
+<div class="card">
+ <h2>7天训练一览</h2>
+
+<div class="day-full pull">
+ <div class="day-full-header">
+ <div class="dfd">周一</div><div class="dfn">拉日训练</div>
+ <span class="dfb dfb-pull">力量</span>
+ </div>
+ <div class="day-full-body">
+ <div class="day-slot morning"><span class="ds-icon"></span><div class="ds-txt"><b>早上 7:00–7:30</b><span>空腹有氧 20′ + 肩康复 10′</span></div></div>
+ <div class="day-slot evening"><span class="ds-icon"></span><div class="ds-txt"><b>晚上 21:00–22:00</b><span>弹力带下拉·哑铃划船·面拉·弯举 各3× + 拉伸 15′</span></div></div>
+ </div>
+</div>
+
+<div class="day-full cardio">
+ <div class="day-full-header">
+ <div class="dfd">周二</div><div class="dfn">有氧+核心日</div>
+ <span class="dfb dfb-cardio">有氧</span>
+ </div>
+ <div class="day-full-body">
+ <div class="day-slot morning"><span class="ds-icon"></span><div class="ds-txt"><b>早上 7:00–7:30</b><span>核心训练 15′ + 肩康复 15′</span></div></div>
+ <div class="day-slot evening"><span class="ds-icon"></span><div class="ds-txt"><b>晚上 21:00–22:00</b><span>低强度有氧 40′ + 拉伸 20′</span></div></div>
+ </div>
+</div>
+
+<div class="day-full push">
+ <div class="day-full-header">
+ <div class="dfd">周三</div><div class="dfn">推日训练 护肩</div>
+ <span class="dfb dfb-push">力量</span>
+ </div>
+ <div class="day-full-body">
+ <div class="day-slot morning"><span class="ds-icon"></span><div class="ds-txt"><b>早上 7:00–7:30</b><span>柔韧拉伸 20′ + 肩康复 10′</span></div></div>
+ <div class="day-slot evening"><span class="ds-icon"></span><div class="ds-txt"><b>晚上 21:00–22:00</b><span>窄距俯卧撑·前平举·臂屈伸·肩外旋 各3× + 拉伸 15′</span></div></div>
+ </div>
+</div>
+
+<div class="day-full cardio">
+ <div class="day-full-header">
+ <div class="dfd">周四</div><div class="dfn">有氧+核心日</div>
+ <span class="dfb dfb-cardio">有氧</span>
+ </div>
+ <div class="day-full-body">
+ <div class="day-slot morning"><span class="ds-icon"></span><div class="ds-txt"><b>早上 7:00–7:30</b><span>空腹有氧 20′ + 肩康复 10′</span></div></div>
+ <div class="day-slot evening"><span class="ds-icon"></span><div class="ds-txt"><b>晚上 21:00–22:00</b><span>核心 20′ + 低强度有氧 20′ + 拉伸 20′</span></div></div>
+ </div>
+</div>
+
+<div class="day-full leg">
+ <div class="day-full-header">
+ <div class="dfd">周五</div><div class="dfn">腿日训练</div>
+ <span class="dfb dfb-leg">力量</span>
+ </div>
+ <div class="day-full-body">
+ <div class="day-slot morning"><span class="ds-icon"></span><div class="ds-txt"><b>早上 7:00–7:30</b><span>核心 15′ + 肩康复 15′</span></div></div>
+ <div class="day-slot evening"><span class="ds-icon"></span><div class="ds-txt"><b>晚上 21:00–22:00</b><span>自重深蹲·臀桥·卷腹·平板 各3× + 拉伸 15′</span></div></div>
+ </div>
+</div>
+
+<div class="day-full recovery">
+ <div class="day-full-header">
+ <div class="dfd">周六</div><div class="dfn">力量维持 + 瑜伽</div>
+ <span class="dfb dfb-recovery">维持</span>
+ </div>
+ <div class="day-full-body">
+ <div class="day-slot morning"><span class="ds-icon"></span><div class="ds-txt"><b>早上 7:00–7:30</b><span>空腹有氧 20′ + 肩康复 10′</span></div></div>
+ <div class="day-slot evening"><span class="ds-icon"></span><div class="ds-txt"><b>晚上 21:00–22:00</b><span>轻量全身 30′ + 瑜伽 30′</span></div></div>
+ </div>
+</div>
+
+<div class="day-full recovery">
+ <div class="day-full-header">
+ <div class="dfd">周日</div><div class="dfn">纯恢复日 + 备餐</div>
+ <span class="dfb dfb-cardio">恢复</span>
+ </div>
+ <div class="day-full-body">
+ <div class="day-slot morning"><span class="ds-icon"></span><div class="ds-txt"><b>早上 7:00–7:30</b><span>柔韧瑜伽 20′ + 肩康复 10′</span></div></div>
+ <div class="day-slot evening"><span class="ds-icon"></span><div class="ds-txt"><b>晚上 21:00–22:00</b><span>散步 30′ + 全身拉伸 30′</span></div></div>
+ <div class="day-slot" style="background:rgba(196,164,164,0.04);border:1px solid rgba(196,164,164,0.08);"><span class="ds-icon"></span><div class="ds-txt"><b>周日备餐 40′</b><span>盐水腌鸡胸 · 切牛肉 · 洗蔬菜 · 蒸南瓜红薯 · 煮蛋9-12个</span></div></div>
+ </div>
+</div>
+</div>
+
+<div class="card">
+ <h2>训练关键规则</h2>
+ <div class="warn-box">
+ <strong>力竭标准（力量日：周一三五）</strong><br>
+ 每组最后一组的最后2-3个，必须感到"真的做不动了"。动作变形、借力也完不成 → 停。
+ </div>
+ <div class="warn-box" style="margin-top:8px">
+ <strong>周六轻量维持（完全不同）</strong><br>
+ 不做力竭！每组做完还有5个余力就停。永远不升级。
+ </div>
+</div>
+
+<div class="card">
+ <h2>右肩保护 · 禁用/替代对照</h2>
+ <div class="shoulder-grid">
+ <div class="shoulder-col no">
+ <h4>训练禁用</h4>
+ <ul>
+ <li>肩上推举</li>
+ <li>哑铃飞鸟</li>
+ <li>哑铃侧平举</li>
+ <li>宽距俯卧撑</li>
+ </ul>
+ </div>
+ <div class="shoulder-col yes">
+ <h4>安全替代</h4>
+ <ul>
+ <li>→ 哑铃前平举</li>
+ <li>→ 窄距俯卧撑</li>
+ <li>→ 弹力带面拉</li>
+ <li>→ 窄距（手与肩同宽）</li>
+ </ul>
+ </div>
+ </div>
+ <p style="font-size: 13px;margin-top:6px;color:var(--danger);line-height:1.6">
+ 任何动作引发右肩疼痛 → 立即停。每天必做肩袖康复：倍他运动康复 3′×3遍 BV1WM411U7yq
+ </p>
+</div>
+
+<div class="card">
+ <h2>饮食规则</h2>
+ <table class="simple-table">
+ <tr><th>类别</th><th>量</th><th>轮换选项</th></tr>
+ <tr><td>蛋白质</td><td>240g</td><td>鸡胸肉 / 瘦牛肉（腿日用牛肉）</td></tr>
+ <tr><td>蔬菜</td><td>300g</td><td>黄瓜 / 丝瓜 / 菠菜 / 生菜 / 苋菜</td></tr>
+ <tr><td>碳水</td><td>50g内</td><td>半根玉米80g / 小块南瓜200g / 半个红薯100g</td></tr>
+ </table>
+ <p style="font-size: 14px;margin-top:6px">鸡胸肉不柴秘诀：4%盐水腌过夜 → 少油煎 → 盖盖焖3分钟</p>
+</div>
+
+<div class="card">
+ <h2>周日备餐（40分钟，管一周）</h2>
+ <table class="simple-table">
+ <tr><th>步骤</th><th>内容</th><th>耗时</th></tr>
+ <tr><td>①</td><td>盐水腌鸡胸 2-3块（装保鲜盒冷藏）</td><td>5′</td></tr>
+ <tr><td>②</td><td>牛肉切薄片分装（速冻）</td><td>8′</td></tr>
+ <tr><td>③</td><td>蔬菜清洗沥干（保鲜袋冷藏）</td><td>10′</td></tr>
+ <tr><td>④</td><td>蒸南瓜/红薯（分装冷藏）</td><td>10′</td></tr>
+ <tr><td>⑤</td><td>煮鸡蛋 9-12个（冰箱存3天量）</td><td>7′</td></tr>
+ </table>
+</div>
+
+<div class="card">
+ <h2>饥饿三级预案（防暴食）</h2>
+ <div class="warn-box" style="margin:0">
+ <b>一级</b>（晚上微饿）→ 喝水 300ml，等10分钟<br>
+ <b>二级</b>（还是饿）→ 啃半根黄瓜<br>
+ <b>三级</b>（饿得睡不着）→ 喝牛奶 150ml（应急）<br>
+ 三级后还不满足 → 蔬菜没吃够300g？碳水给少了？
+ </div>
+</div>
+
+<div class="card">
+ <h2>睡眠规则</h2>
+ <table class="simple-table">
+ <tr><td>关灯时间</td><td><b>00:00</b></td></tr>
+ <tr><td>起床时间</td><td><b>07:00</b></td></tr>
+ <tr><td>总时长</td><td>7小时</td></tr>
+ <tr><td>睡姿</td><td><b>必须侧卧</b>（减轻打鼾/OSA）</td></tr>
+ <tr><td>睡前</td><td>23:50 手机放下 · 房间全黑</td></tr>
+ <tr><td>下午3点后</td><td>不喝咖啡</td></tr>
+ </table>
+</div>
+
+<div class="card">
+ <h2>每日时间线</h2>
+ <ul class="step-list">
+ <li><span class="step-num">1</span>07:00 起床 · 早上运动 30′（按当天安排）</li>
+ <li><span class="step-num">2</span>08:00 洗澡 · 08:30 小电动通勤</li>
+ <li><span class="step-num">3</span>09:00 早餐：3全蛋+1牛奶+麦片（蛋白27g）</li>
+ <li><span class="step-num">4</span>12:00 午餐：米饭减半，选蒸煮菜 · 散步10′</li>
+ <li><span class="step-num">5</span>5次饮水：09:30 / 11:30 / 13:30 / 15:30 / 17:30</li>
+ <li><span class="step-num">6</span>19:00 晚餐：240g肉+300g蔬菜+碳水50g内（蛋白53g）</li>
+ <li><span class="step-num">7</span>21:00–22:00 晚上训练（按当天安排）</li>
+ <li><span class="step-num">8</span>00:00 关灯侧卧睡觉</li>
+ </ul>
+</div>
+
+<div class="card">
+ <h2>其他重要事项</h2>
+ <div class="hint">
+ <b>称重规则</b><br>
+ 每天早上起床排尿后、空腹称一次。只看周均值，别被单日波动吓到（±1-2kg正常）。<br>
+ 目标速度：0.5-1kg/周。
+ </div>
+ <div class="warn-box" style="margin-top:8px">
+ <strong>警示信号（出现任一立即调整）</strong><br>
+ ① 连续3天饿到睡不着 → 蔬菜加到400g，或碳水从50g加到60g<br>
+ ② 力量训练表现持续下降 → 回查饮食缺口<br>
+ ③ 右肩疼痛加重 → 停推日训练，只做康复，必要时就医<br>
+ ④ 体重一周不掉 → 坚持2周再看，可能是水分代偿
+ </div>
+ <div class="hint" style="margin-top:8px">
+ <b>里程碑预期</b><br>
+ 2周后 → 完成全部新手版组数 → 升级标准版<br>
+ 1个月 → 体重 ~82-83kg，衣服开始松<br>
+ 3个月 → 体重 ~75-77kg，肚子明显小<br>
+ 5-6个月 → 体重 ~63-70kg，腹部平坦
+ </div>
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,10 @@
+*.pyc
+__pycache__/
+*.egg-info/
+.DS_Store
+*.zip
+.git/
+.trae/
+images/test-*.jpg
+images/*.png
+git/

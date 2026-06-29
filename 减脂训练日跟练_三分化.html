@@ -1,0 +1,2266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>训练日跟练 · 减脂教练</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+/* ============================================================
+   莫兰迪色系设计系统
+   ============================================================ */
+
+/* 配色变量 - 莫兰迪色系 */
+:root {
+  /* 主色调：灰粉色系 */
+  --morandi-rose: #C4A4A4;
+  --morandi-rose-deep: #A88B8B;
+  --morandi-rose-light: #EDE0E0;
+  --morandi-rose-soft: #F5ECEC;
+  
+  /* 辅色：灰绿系 */
+  --morandi-sage: #9BA89B;
+  --morandi-sage-deep: #7A887A;
+  --morandi-sage-light: #D9DED9;
+  --morandi-sage-soft: #ECEFEC;
+  
+  /* 辅色：灰蓝系 */
+  --morandi-blue: #8B9BA8;
+  --morandi-blue-deep: #6B7A88;
+  --morandi-blue-light: #D4DCE0;
+  --morandi-blue-soft: #E8ECEF;
+  
+  /* 辅色：灰紫系 */
+  --morandi-lavender: #A89BA8;
+  --morandi-lavender-deep: #8A7B8A;
+  --morandi-lavender-light: #E0D9E0;
+  --morandi-lavender-soft: #F0ECEF;
+  
+  /* 辅色：灰橙系 */
+  --morandi-apricot: #C4A88B;
+  --morandi-apricot-deep: #A88B6B;
+  --morandi-apricot-light: #EDDFD4;
+  --morandi-apricot-soft: #F5ECE4;
+  
+  /* 活力三环颜色 - 莫兰迪化 */
+  --ring-calorie: #C4A4A4;
+  --ring-exercise: #C4A88B;
+  --ring-active: #8B9BA8;
+  
+  /* 心率区间颜色 - 莫兰迪化 */
+  --hr-rest: #9BA89B;
+  --hr-warmup: #C4A88B;
+  --hr-fatburn: #C4A4A4;
+  --hr-cardio: #A88B8B;
+  --hr-peak: #8B6B6B;
+  
+  /* 文字颜色 - 暖灰系 */
+  --text-dark: #4A4A4A;
+  --text-gray: #7A7A7A;
+  --text-light: #A0A0A0;
+  
+  /* 背景颜色 */
+  --bg-primary: #FAF8F8;
+  --bg-secondary: #F5F3F3;
+}
+
+body {
+  background: linear-gradient(180deg, #FAF8F8 0%, #F5F3F3 100%);
+  min-height: 100vh;
+}
+
+/* 莫兰迪流体卡片 */
+.huawei-card {
+  background: #FFFFFF;
+  border-radius: 24px;
+  box-shadow: 0 2px 12px rgba(168, 139, 139, 0.08);
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.huawei-card-header {
+  background: linear-gradient(135deg, var(--morandi-rose-deep), var(--morandi-rose));
+  padding: 20px 20px 24px;
+  color: #FFFFFF;
+}
+
+/* 活力三环 */
+.activity-rings {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 32px 20px;
+  background: linear-gradient(180deg, var(--morandi-rose-deep) 0%, var(--morandi-rose) 100%);
+}
+
+.ring-container {
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+
+.ring-svg {
+  transform: rotate(-90deg);
+}
+
+.ring-track {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.15);
+  stroke-width: 12;
+}
+
+.ring-progress {
+  fill: none;
+  stroke-width: 12;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.5s ease;
+}
+
+.ring-calorie-track { stroke: rgba(196, 164, 164, 0.3); }
+.ring-calorie-progress { stroke: var(--ring-calorie); }
+.ring-exercise-track { stroke: rgba(196, 168, 139, 0.3); }
+.ring-exercise-progress { stroke: var(--ring-exercise); }
+.ring-active-track { stroke: rgba(139, 155, 168, 0.3); }
+.ring-active-progress { stroke: var(--ring-active); }
+
+.ring-center-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #FFFFFF;
+}
+
+.ring-percent {
+  font-size: 48px;
+  font-weight: 700;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.ring-label {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 4px;
+}
+
+/* 三环数据标签 */
+.ring-legend {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.ring-legend-item {
+  text-align: center;
+}
+
+.ring-legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+.ring-legend-label {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.ring-legend-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: #FFFFFF;
+  margin-top: 4px;
+}
+
+/* 训练概览卡片 */
+.overview-card {
+  padding: 20px;
+}
+
+.overview-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 16px;
+}
+
+.overview-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.stat-item {
+  background: var(--morandi-rose-soft);
+  border-radius: 16px;
+  padding: 16px 12px;
+  text-align: center;
+}
+
+.stat-icon {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--morandi-rose-deep);
+}
+
+.stat-unit {
+  font-size: 12px;
+  color: var(--text-gray);
+}
+
+.stat-label {
+  font-size: 13px;
+  color: var(--text-gray);
+  margin-top: 4px;
+}
+
+/* 心率区间卡片 */
+.hr-zone-card {
+  padding: 20px;
+}
+
+.hr-zone-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.hr-zone-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--morandi-rose), var(--morandi-rose-deep));
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  font-size: 20px;
+}
+
+.hr-zone-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.hr-zone-subtitle {
+  font-size: 12px;
+  color: var(--text-gray);
+}
+
+.hr-zones {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.hr-zone-bar {
+  flex: 1;
+  height: 8px;
+  border-radius: 4px;
+  position: relative;
+}
+
+.hr-zone-rest { background: var(--hr-rest); }
+.hr-zone-warmup { background: var(--hr-warmup); }
+.hr-zone-fatburn { background: var(--hr-fatburn); }
+.hr-zone-cardio { background: var(--hr-cardio); }
+
+.hr-zone-bar.active::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: inherit;
+  box-shadow: 0 0 8px currentColor;
+}
+
+.hr-zone-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-light);
+}
+
+.hr-zone-range {
+  text-align: center;
+}
+
+.hr-zone-range-label {
+  font-size: 10px;
+  color: var(--text-gray);
+}
+
+.hr-zone-range-value {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+/* 今日训练主卡片 */
+.today-card {
+  margin: 16px;
+  background: #FFFFFF;
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.today-header {
+  background: linear-gradient(135deg, var(--morandi-rose-deep), var(--morandi-rose));
+  padding: 24px 20px;
+  color: #FFFFFF;
+  position: relative;
+}
+
+.today-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle at 70% 30%, rgba(196, 164, 164, 0.3), transparent 70%);
+  border-radius: 50%;
+}
+
+.today-day {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 8px;
+}
+
+.today-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.today-type {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #FFFFFF;
+}
+
+.today-stats-mini {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.today-stat-mini {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.today-stat-mini-icon {
+  width: 24px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.today-stat-mini-value {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* 训练日程切换 */
+.day-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.day-tabs::-webkit-scrollbar { display: none; }
+
+.day-tab {
+  flex: 0 0 auto;
+  min-width: 64px;
+  padding: 12px 16px;
+  background: #FFFFFF;
+  border: 2px solid transparent;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.day-tab:hover { background: var(--morandi-rose-soft); }
+
+.day-tab.active {
+  background: var(--morandi-rose-deep);
+  color: #FFFFFF;
+  border-color: var(--morandi-rose);
+}
+
+.day-tab-name {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.day-tab-type {
+  font-size: 11px;
+  opacity: 0.7;
+  margin-top: 2px;
+}
+
+/* 训练内容区域 */
+.training-section {
+  margin: 16px;
+  background: #FFFFFF;
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: linear-gradient(90deg, var(--morandi-rose-soft), #FFFFFF);
+}
+
+.section-header-with-btn {
+  justify-content: space-between;
+}
+
+.section-header-with-btn > div {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-start-btn {
+  padding: 8px 16px;
+  background: linear-gradient(135deg, var(--morandi-rose-deep), var(--morandi-rose));
+  color: #FFFFFF;
+  border: none;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.section-start-btn:active {
+  transform: scale(0.96);
+}
+
+.section-emoji {
+  width: 32px;
+  height: 32px;
+  background: var(--morandi-rose-deep);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+}
+
+.section-title-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.section-desc {
+  font-size: 12px;
+  color: var(--text-gray);
+  padding: 0 20px 12px;
+}
+
+/* 动作卡片 - 莫兰迪风格 */
+.move-card-huawei {
+  margin: 12px 20px;
+  background: linear-gradient(135deg, var(--morandi-rose-soft), #FAFAFA);
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid rgba(196, 164, 164, 0.15);
+}
+
+.move-header-huawei {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.move-number {
+  width: 28px;
+  height: 28px;
+  background: var(--morandi-rose-deep);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.move-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.move-meta-huawei {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.move-tag {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.move-tag-sets { background: var(--morandi-apricot); color: #5A4A3A; }
+.move-tag-rest { background: var(--morandi-blue); color: #FFFFFF; }
+
+.move-steps-huawei {
+  margin-top: 12px;
+}
+
+.move-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 0;
+  font-size: 13px;
+  color: var(--text-gray);
+  line-height: 1.6;
+}
+
+.move-step-num {
+  width: 20px;
+  height: 20px;
+  background: var(--morandi-sage);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.move-tips-huawei {
+  margin-top: 12px;
+  padding: 12px;
+  background: linear-gradient(135deg, var(--morandi-apricot-soft), var(--morandi-apricot-light));
+  border-radius: 12px;
+  border: 1px solid rgba(196, 168, 139, 0.3);
+}
+
+.move-tips-huawei-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--morandi-apricot-deep);
+  margin-bottom: 6px;
+}
+
+.move-tips-huawei-content {
+  font-size: 12px;
+  color: var(--text-gray);
+  line-height: 1.6;
+}
+
+.move-weight-huawei {
+  margin-top: 12px;
+  padding: 12px;
+  background: linear-gradient(135deg, var(--morandi-blue-soft), var(--morandi-blue-light));
+  border-radius: 12px;
+  border: 1px solid rgba(139, 155, 168, 0.3);
+}
+
+.move-weight-huawei-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--morandi-blue-deep);
+  margin-bottom: 6px;
+}
+
+.move-weight-huawei-content {
+  font-size: 12px;
+  color: var(--text-gray);
+}
+
+.move-action-btns {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.move-rest-btn-huawei {
+  flex: 1;
+  padding: 10px;
+  background: linear-gradient(135deg, var(--morandi-rose-deep), var(--morandi-rose));
+  border-radius: 12px;
+  color: #FFFFFF;
+  font-size: 13px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+}
+
+/* 视频卡片 - 莫兰迪风格 */
+.video-card-huawei {
+  margin: 12px 20px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(196, 164, 164, 0.15);
+}
+
+.video-link-huawei {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--morandi-rose-soft), #FAFAFA);
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.2s;
+}
+
+.video-link-huawei:hover {
+  background: linear-gradient(135deg, var(--morandi-lavender-soft), var(--morandi-rose-soft));
+}
+
+.video-icon-huawei {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--morandi-rose-deep), var(--morandi-lavender-deep));
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-icon-inner {
+  width: 0;
+  height: 0;
+  border-left: 12px solid #FFFFFF;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  margin-left: 4px;
+}
+
+.video-info-huawei {
+  flex: 1;
+}
+
+.video-title-huawei {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.video-duration-huawei {
+  font-size: 12px;
+  color: var(--text-gray);
+  margin-top: 4px;
+}
+
+.video-arrow-huawei {
+  color: var(--morandi-rose);
+  font-size: 18px;
+}
+
+/* 恢复提示 */
+.recovery-tip-huawei {
+  margin: 12px 20px;
+  padding: 20px;
+  background: linear-gradient(135deg, var(--morandi-sage-soft), var(--morandi-sage-light));
+  border-radius: 16px;
+  border: 1px solid rgba(155, 168, 155, 0.3);
+}
+
+.recovery-tip-icon {
+  width: 48px;
+  height: 48px;
+  background: var(--morandi-sage);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+
+.recovery-tip-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+}
+
+.recovery-tip-desc {
+  font-size: 13px;
+  color: var(--text-gray);
+  line-height: 1.7;
+}
+
+/* 安全提示卡片 */
+.safety-card-huawei {
+  margin: 16px;
+  background: #FFFFFF;
+  border-radius: 24px;
+  padding: 20px;
+}
+
+.safety-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.safety-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--morandi-apricot), var(--morandi-apricot-deep));
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  font-size: 20px;
+}
+
+.safety-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.safety-list {
+  font-size: 13px;
+  color: var(--text-gray);
+  line-height: 1.8;
+}
+
+.safety-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 0;
+}
+
+.safety-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--morandi-apricot);
+  border-radius: 50%;
+  margin-top: 6px;
+}
+
+/* 页面底部 */
+.page-footer {
+  text-align: center;
+  padding: 24px 16px;
+  color: var(--text-light);
+  font-size: 12px;
+}
+
+/* 休息计时器 - 莫兰迪风格 */
+.rest-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(168, 139, 139, 0.9);
+  z-index: 200;
+}
+
+.rest-timer-huawei {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #FFFFFF;
+  border-radius: 32px;
+  padding: 40px 32px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(168, 139, 139, 0.3);
+  z-index: 210;
+}
+
+.rest-timer-ring {
+  width: 160px;
+  height: 160px;
+  margin: 0 auto 20px;
+  position: relative;
+}
+
+.rest-timer-ring svg {
+  transform: rotate(-90deg);
+}
+
+.rest-timer-ring-track {
+  fill: none;
+  stroke: #EDE0E0;
+  stroke-width: 8;
+}
+
+.rest-timer-ring-progress {
+  fill: none;
+  stroke: var(--morandi-rose);
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s linear;
+}
+
+.rest-timer-num {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--morandi-rose-deep);
+}
+
+.rest-timer-label {
+  font-size: 14px;
+  color: var(--text-gray);
+  margin-bottom: 20px;
+}
+
+.rest-timer-btns {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.rest-timer-btn {
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+}
+
+.rest-timer-btn-primary {
+  background: var(--morandi-rose-deep);
+  color: #FFFFFF;
+}
+
+.rest-timer-btn-secondary {
+  background: var(--morandi-rose-soft);
+  color: var(--text-gray);
+}
+
+
+/* ============================================================
+   智能训练计时器样式 v3.0
+   ============================================================ */
+.training-timer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.92);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+}
+
+.training-timer-modal {
+  width: 100%;
+  max-width: 480px;
+  background: #FFFFFF;
+  border-radius: 16px;
+  padding: 0;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+/* 顶部标题栏 */
+.timer-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, var(--morandi-rose-deep), var(--morandi-rose));
+}
+
+.timer-workout-title {
+  font-size: 14px;
+  color: rgba(255,255,255,0.9);
+  font-weight: 500;
+}
+
+.timer-remaining {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.timer-remaining-num {
+  font-size: 32px;
+  font-weight: 700;
+  color: #FFFFFF;
+  font-variant-numeric: tabular-nums;
+}
+
+.timer-remaining-unit {
+  font-size: 16px;
+  color: rgba(255,255,255,0.8);
+}
+
+/* 总进度条 */
+.timer-total-progress {
+  height: 6px;
+  background: rgba(255,255,255,0.2);
+}
+
+.timer-total-progress-bar {
+  height: 100%;
+  background: #FFFFFF;
+  width: 0%;
+  transition: width 0.5s ease;
+}
+
+/* 视频区域 */
+.timer-video-area {
+  background: linear-gradient(135deg, #2A3A2A, #1A2A1A);
+  height: 220px;
+  position: relative;
+  overflow: hidden;
+}
+
+.timer-video-player {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+}
+
+.timer-video-controls {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.timer-play-btn {
+  padding: 10px 24px;
+  border-radius: 20px;
+  background: rgba(107, 142, 139, 0.9);
+  color: #FFFFFF;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.timer-play-btn:active {
+  transform: scale(0.96);
+}
+
+.timer-video-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  background: linear-gradient(135deg, #2A3A2A, #1A2A1A);
+  padding: 20px;
+}
+
+.timer-video-placeholder-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.timer-video-placeholder-text {
+  font-size: 18px;
+  color: #FFFFFF;
+  font-weight: 500;
+  text-align: center;
+}
+
+.timer-video-fallback {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #606060;
+  background: linear-gradient(135deg, #2A2A2A, #1A1A1A);
+}
+
+/* 当前动作信息 */
+.timer-current-move {
+  padding: 20px;
+  background: #FAFAFA;
+  border-bottom: 1px solid #F0F0F0;
+}
+
+.timer-current-move-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.timer-current-move-name {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.timer-current-move-reps {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--morandi-rose);
+}
+
+.timer-current-set-info {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--text-sub);
+}
+
+/* 组进度条 */
+.timer-set-progress {
+  height: 4px;
+  background: #EDE0E0;
+  margin-top: 12px;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.timer-set-progress-bar {
+  height: 100%;
+  background: var(--morandi-rose);
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+/* 动作列表 */
+.timer-moves-list {
+  display: flex;
+  gap: 8px;
+  padding: 16px 20px 20px;
+  background: #FFFFFF;
+  overflow-x: hidden;
+}
+
+.timer-move-item {
+  flex: 1;
+  min-width: 60px;
+  background: #F5F0F0;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  padding: 12px 6px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.timer-move-item.active {
+  background: var(--morandi-rose-soft);
+  border-color: var(--morandi-rose);
+}
+
+.timer-move-item.completed {
+  background: var(--morandi-sage-soft);
+  border-color: var(--morandi-sage);
+}
+
+.timer-move-item-num {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #D9D0D0;
+  color: #FFFFFF;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 6px;
+}
+
+.timer-move-item.active .timer-move-item-num {
+  background: var(--morandi-rose);
+}
+
+.timer-move-item.completed .timer-move-item-num {
+  background: var(--morandi-sage);
+}
+
+.timer-move-item-name {
+  font-size: 10px;
+  color: var(--text-gray);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.timer-move-item.active .timer-move-item-name {
+  color: var(--morandi-rose-deep);
+  font-weight: 600;
+}
+
+.timer-move-item.completed .timer-move-item-name {
+  color: var(--morandi-sage-deep);
+}
+
+/* 控制按钮 */
+.timer-controls {
+  display: flex;
+  gap: 12px;
+  padding: 0 20px 20px;
+  background: #FFFFFF;
+}
+
+.timer-btn {
+  flex: 1;
+  padding: 14px 20px;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.timer-btn-primary {
+  background: linear-gradient(135deg, var(--morandi-rose), var(--morandi-rose-deep));
+  color: white;
+}
+
+.timer-btn-primary:active {
+  transform: scale(0.98);
+}
+
+.timer-btn-secondary {
+  background: #F0ECEC;
+  color: var(--text-gray);
+}
+
+.timer-btn-secondary:active {
+  transform: scale(0.98);
+}
+
+.timer-btn-exit {
+  background: transparent;
+  color: var(--text-sub);
+  border: 1px solid #E5DDDD;
+}
+
+/* 休息状态样式 */
+.timer-rest-mode .timer-top-bar {
+  background: linear-gradient(135deg, var(--morandi-sage-deep), var(--morandi-sage));
+}
+
+.timer-rest-mode .timer-set-progress-bar {
+  background: var(--morandi-sage);
+}
+
+.timer-rest-mode .timer-current-move-reps {
+  color: var(--morandi-sage);
+}
+
+.timer-rest-mode .timer-move-item.active {
+  background: var(--morandi-sage-soft);
+  border-color: var(--morandi-sage);
+}
+
+.timer-rest-mode .timer-move-item.active .timer-move-item-num {
+  background: var(--morandi-sage);
+}
+
+.timer-rest-mode .timer-move-item.active .timer-move-item-name {
+  color: var(--morandi-sage-deep);
+}
+
+.timer-rest-mode .timer-btn-primary {
+  background: linear-gradient(135deg, var(--morandi-sage), var(--morandi-sage-deep));
+}
+
+/* 训练卡片上的开始训练按钮 */
+.move-start-btn-huawei {
+  background: linear-gradient(135deg, var(--morandi-rose), var(--morandi-rose-deep));
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.move-start-btn-huawei:active {
+  transform: scale(0.98);
+}
+
+/* 深色模式适配 - 莫兰迪风格 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-dark: #E8E8E8;
+    --text-gray: #A0A0A0;
+    --text-light: #707070;
+    --morandi-rose-soft: #3A2A2A;
+    --morandi-rose-light: #2A1A1A;
+  }
+  
+  body {
+    background: linear-gradient(180deg, #1A1A1A 0%, #151515 100%);
+  }
+  
+  .huawei-card, .today-card, .training-section, .safety-card-huawei {
+    background: #252525;
+  }
+  
+  .day-tab { background: #303030; }
+  .day-tab.active { background: var(--morandi-rose-deep); }
+  
+  .move-card-huawei { background: #303030; border-color: #404040; }
+  .video-link-huawei { background: #303030; }
+  
+  .stat-item { background: #303030; }
+  .section-header { background: linear-gradient(90deg, #3A2A2A, #252525); }
+  
+  .recovery-tip-huawei { background: linear-gradient(135deg, #2A3A2A, #1A2A1A); }
+  .move-tips-huawei { background: linear-gradient(135deg, #3A3025, #2A251A); }
+  .move-weight-huawei { background: linear-gradient(135deg, #2A303A, #1A202A); }
+  
+  .stat-value { color: #E8E8E8; }
+  .stat-unit { color: #A0A0A0; }
+  .stat-label { color: #A0A0A0; }
+}
+</style>
+</head>
+<body>
+<script>window.PAGE_META = { key: 'follow', dark: true, title: '训练日跟练' };</script>
+
+<main class="container">
+
+  <!-- 视频管理入口卡片 -->
+  <section class="huawei-card" style="margin-bottom:16px;padding:16px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-size:15px;font-weight:500;color:var(--text-dark);">🎬 视频管理</div>
+        <div style="font-size:12px;color:var(--text-gray);margin-top:4px;">为每个动作添加视频链接</div>
+      </div>
+      <a href="视频管理后台.html" style="padding:10px 20px;background:linear-gradient(135deg, var(--morandi-rose-deep), var(--morandi-rose));color:#FFFFFF;text-decoration:none;border-radius:12px;font-size:14px;font-weight:500;">进入管理</a>
+    </div>
+  </section>
+
+  <!-- 训练概览 -->
+  <section class="huawei-card overview-card">
+    <div class="overview-title">📊 今日训练概览</div>
+    <div class="overview-stats">
+      <div class="stat-item">
+        <div class="stat-icon">🔥</div>
+        <div class="stat-value" id="statCalorie">486</div>
+        <div class="stat-unit">kcal</div>
+        <div class="stat-label">预计消耗</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-icon">⏱️</div>
+        <div class="stat-value" id="statDuration">45</div>
+        <div class="stat-unit">分钟</div>
+        <div class="stat-label">训练时长</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-icon">💪</div>
+        <div class="stat-value" id="statMoves">8</div>
+        <div class="stat-unit">组</div>
+        <div class="stat-label">动作数量</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 心率区间 -->
+  <section class="huawei-card hr-zone-card">
+    <div class="hr-zone-header">
+      <div class="hr-zone-icon">💓</div>
+      <div>
+        <div class="hr-zone-title">目标心率区间</div>
+        <div class="hr-zone-subtitle">根据年龄自动计算，训练时保持心率在此区间效果最佳</div>
+      </div>
+    </div>
+    <div class="hr-zones">
+      <div class="hr-zone-bar hr-zone-rest" id="hrRest"></div>
+      <div class="hr-zone-bar hr-zone-warmup" id="hrWarmup"></div>
+      <div class="hr-zone-bar hr-zone-fatburn active" id="hrFatburn"></div>
+      <div class="hr-zone-bar hr-zone-cardio" id="hrCardio"></div>
+    </div>
+    <div class="hr-zone-labels">
+      <div class="hr-zone-range">
+        <div class="hr-zone-range-label">静息</div>
+        <div class="hr-zone-range-value" id="hrRestRange">60-100</div>
+      </div>
+      <div class="hr-zone-range">
+        <div class="hr-zone-range-label">热身</div>
+        <div class="hr-zone-range-value" id="hrWarmupRange">100-120</div>
+      </div>
+      <div class="hr-zone-range">
+        <div class="hr-zone-range-label">燃脂</div>
+        <div class="hr-zone-range-value" id="hrFatburnRange">120-150</div>
+      </div>
+      <div class="hr-zone-range">
+        <div class="hr-zone-range-label">心肺</div>
+        <div class="hr-zone-range-value" id="hrCardioRange">150-180</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 训练日程切换 -->
+  <div class="day-tabs" id="dayTabs"></div>
+
+  <!-- 今日训练主卡片 -->
+  <section class="today-card" id="todayCard"></section>
+
+  <!-- 训练内容 -->
+  <section class="training-section" id="dayContent"></section>
+
+  <!-- 安全提示 -->
+  <section class="safety-card-huawei" id="safetyCard"></section>
+
+  <div class="page-footer">
+    减脂教练 · 华为运动健康风格 · v4.0
+  </div>
+</main>
+
+<script src="data.js"></script>
+<script src="shared.js"></script>
+<script>
+(function () {
+  const today = new Date();
+  const dayNames = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+  let currentDay = dayNames[today.getDay()];
+  const allDays = FIT && FIT.weekly ? FIT.weekly.map(function (w) { return w.day; }) : ['周一'];
+  if (allDays.indexOf(currentDay) === -1) currentDay = FIT.weekly[0].day;
+
+  // 根据训练类型更新统计数据
+  function updateStats(dayData, plan) {
+    const moveCount = plan ? plan.moves.length : 0;
+    const morningCount = dayData.morning.items.length;
+    const totalMoves = morningCount + moveCount;
+    
+    // 根据训练类型估算消耗
+    let calorieEstimate = 200;
+    let durationEstimate = 30;
+    
+    if (plan) {
+      if (dayData.dayKey === 'pull' || dayData.dayKey === 'push' || dayData.dayKey === 'leg') {
+        calorieEstimate = 350 + totalMoves * 15;
+        durationEstimate = 45 + totalMoves * 3;
+      } else if (dayData.dayKey === 'cardio') {
+        calorieEstimate = 400;
+        durationEstimate = 50;
+      }
+    } else {
+      calorieEstimate = 150;
+      durationEstimate = 30;
+    }
+    
+    document.getElementById('statCalorie').textContent = calorieEstimate;
+    document.getElementById('statDuration').textContent = durationEstimate;
+    document.getElementById('statMoves').textContent = totalMoves;
+    
+    // 更新心率区间高亮
+    const hrBars = document.querySelectorAll('.hr-zone-bar');
+    hrBars.forEach(function(bar) { bar.classList.remove('active'); });
+    
+    if (plan) {
+      if (dayData.dayKey === 'cardio') {
+        document.getElementById('hrCardio').classList.add('active');
+      } else {
+        document.getElementById('hrFatburn').classList.add('active');
+      }
+    } else {
+      document.getElementById('hrWarmup').classList.add('active');
+    }
+  }
+
+  function renderTabs() {
+    const wrap = document.getElementById('dayTabs');
+    wrap.innerHTML = '';
+    FIT.weekly.forEach(function (d) {
+      const btn = document.createElement('button');
+      btn.className = 'day-tab' + (d.day === currentDay ? ' active' : '');
+      let dayType = d.title.split(' ')[0] || '训练';
+      if (d.dayKey === 'cardio') dayType = '有氧';
+      if (d.dayKey === 'recovery') dayType = '恢复';
+      
+      btn.innerHTML = '<div class="day-tab-name">' + d.day + '</div>' +
+                      '<div class="day-tab-type">' + dayType + '</div>';
+      
+      btn.addEventListener('click', function () {
+        currentDay = d.day;
+        renderTabs();
+        renderToday();
+        renderDay();
+        window.scrollTo({ top: 200, behavior: 'smooth' });
+      });
+      wrap.appendChild(btn);
+    });
+  }
+
+  function renderToday() {
+    const dayData = FIT.weekly.find(function (d) { return d.day === currentDay; });
+    if (!dayData) return;
+    const plan = FIT.plans[dayData.evening.planKey];
+    
+    const container = document.getElementById('todayCard');
+    const moveCount = plan ? plan.moves.length : 0;
+    const morningCount = dayData.morning.items.length;
+    
+    let typeColor = 'var(--huawei-cyan)';
+    if (dayData.dayKey === 'pull') typeColor = '#3B82F6';
+    if (dayData.dayKey === 'push') typeColor = '#F59E0B';
+    if (dayData.dayKey === 'leg') typeColor = '#EF4444';
+    if (dayData.dayKey === 'cardio') typeColor = '#10B981';
+    if (dayData.dayKey === 'recovery') typeColor = '#8B5CF6';
+    
+    container.innerHTML = 
+      '<div class="today-header">' +
+        '<div class="today-day">' + (dayData.day === dayNames[today.getDay()] ? '今天 · ' + dayData.day : dayData.day) + '</div>' +
+        '<div class="today-title">' + dayData.title + '</div>' +
+        '<div class="today-type" style="background:' + typeColor + '20;color:' + typeColor + '">' + 
+          (dayData.dayKey === 'recovery' ? '恢复日' : '训练日') + 
+        '</div>' +
+        '<div class="today-stats-mini">' +
+          '<div class="today-stat-mini">' +
+            '<div class="today-stat-mini-icon">🌅</div>' +
+            '<div class="today-stat-mini-value">' + morningCount + ' 个晨练</div>' +
+          '</div>' +
+          '<div class="today-stat-mini">' +
+            '<div class="today-stat-mini-icon">🌙</div>' +
+            '<div class="today-stat-mini-value">' + moveCount + ' 个主课</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    
+    updateStats(dayData, plan);
+  }
+
+  function videoCardHTML(vidKey) {
+    if (!vidKey) return '';
+    const v = FIT.vids[vidKey] || { douyin: '', title: '' };
+    if (!v.douyin && !v.bv) return '';
+    
+    const url = v.douyin || ('https://player.bilibili.com/player.html?bvid=' + v.bv);
+    
+    return '<div class="video-card-huawei">' +
+             '<a class="video-link-huawei" href="' + url + '" target="_blank" rel="noopener">' +
+               '<div class="video-icon-huawei"><div class="video-icon-inner"></div></div>' +
+               '<div class="video-info-huawei">' +
+                 '<div class="video-title-huawei">' + v.title + '</div>' +
+                 '<div class="video-duration-huawei">点击观看完整跟练视频</div>' +
+               '</div>' +
+               '<div class="video-arrow-huawei">→</div>' +
+             '</a>' +
+           '</div>';
+  }
+
+  function showRestTimer(seconds, moveName) {
+    const overlay = document.createElement('div');
+    overlay.className = 'rest-overlay';
+    document.body.appendChild(overlay);
+
+    const timer = document.createElement('div');
+    timer.className = 'rest-timer-huawei';
+    
+    const circumference = 2 * Math.PI * 72;
+    
+    timer.innerHTML =
+      '<div class="rest-timer-ring">' +
+        '<svg width="160" height="160" viewBox="0 0 160 160">' +
+          '<circle class="rest-timer-ring-track" cx="80" cy="80" r="72" />' +
+          '<circle class="rest-timer-ring-progress" cx="80" cy="80" r="72" ' +
+            'stroke-dasharray="' + circumference + '" stroke-dashoffset="0" id="timerProgress" />' +
+        '</svg>' +
+        '<div class="rest-timer-num" id="timerNum">' + seconds + '</div>' +
+      '</div>' +
+      '<div class="rest-timer-label">' + (moveName || '') + ' · 休息倒计时</div>' +
+      '<div class="rest-timer-btns">' +
+        '<button class="rest-timer-btn rest-timer-btn-primary" id="timerSkip">跳过休息</button>' +
+        '<button class="rest-timer-btn rest-timer-btn-secondary" id="timerClose">关闭</button>' +
+      '</div>';
+    
+    document.body.appendChild(timer);
+
+    let remaining = seconds;
+    const timerNum = document.getElementById('timerNum');
+    const timerProgress = document.getElementById('timerProgress');
+
+    const interval = setInterval(function() {
+      remaining--;
+      timerNum.textContent = remaining;
+      const offset = circumference * (1 - remaining / seconds);
+      timerProgress.style.strokeDashoffset = offset;
+      
+      if (remaining <= 0) {
+        clearInterval(interval);
+        timerNum.textContent = '完成';
+        timerNum.style.color = 'var(--huawei-cyan)';
+        setTimeout(function() { closeTimer(); }, 800);
+      }
+    }, 1000);
+
+    function closeTimer() {
+      clearInterval(interval);
+      overlay.remove();
+      timer.remove();
+    }
+
+    document.getElementById('timerSkip').addEventListener('click', closeTimer);
+    document.getElementById('timerClose').addEventListener('click', closeTimer);
+    window.closeRestTimer = closeTimer;
+  }
+
+  function moveCardHTML(move, index) {
+    let moveName = typeof move === 'string' ? move : (move.name || '');
+    let sets = typeof move === 'object' && move.sets ? move.sets : '4组';
+    let rest = typeof move === 'object' && move.rest ? move.rest : '60秒';
+    let steps = typeof move === 'object' && move.steps ? move.steps : [];
+    let tips = typeof move === 'object' && move.tips ? move.tips : '';
+    let weight = typeof move === 'object' && move.weight ? move.weight : '';
+
+    let stepsHTML = '';
+    if (steps.length) {
+      stepsHTML = '<div class="move-steps-huawei">';
+      steps.forEach(function (s, i) {
+        stepsHTML += '<div class="move-step">' +
+                       '<div class="move-step-num">' + (i + 1) + '</div>' +
+                       '<div>' + s + '</div>' +
+                     '</div>';
+      });
+      stepsHTML += '</div>';
+    }
+
+    let tipsHTML = '';
+    if (tips) {
+      tipsHTML = '<div class="move-tips-huawei">' +
+                  '<div class="move-tips-huawei-title">💡 发力提示</div>' +
+                  '<div class="move-tips-huawei-content">' + tips + '</div>' +
+                '</div>';
+    }
+
+    let weightHTML = '';
+    if (weight) {
+      weightHTML = '<div class="move-weight-huawei">' +
+                    '<div class="move-weight-huawei-title">🏋️ 重量建议</div>' +
+                    '<div class="move-weight-huawei-content">' + weight + '</div>' +
+                  '</div>';
+    }
+
+    return '<div class="move-card-huawei">' +
+             '<div class="move-header-huawei">' +
+               '<div class="move-number">' + (index + 1) + '</div>' +
+               '<div class="move-name">' + moveName + '</div>' +
+               '<div class="move-meta-huawei">' +
+                 '<span class="move-tag move-tag-sets">' + sets + '</span>' +
+                 '<span class="move-tag move-tag-rest">' + rest + '</span>' +
+               '</div>' +
+             '</div>' +
+             stepsHTML +
+             tipsHTML +
+             weightHTML +
+           '</div>';
+  }
+
+  function renderDay() {
+    const dayData = FIT.weekly.find(function (d) { return d.day === currentDay; });
+    if (!dayData) return;
+    const plan = FIT.plans[dayData.evening.planKey];
+
+    const container = document.getElementById('dayContent');
+    let html = '';
+
+    // 早晨训练
+    html += '<div class="section-header section-header-with-btn">' +
+              '<div class="section-emoji">🌅</div>' +
+              '<div class="section-title-text">' + dayData.morning.title + '</div>' +
+              '<button class="section-start-btn" onclick="startMorningTraining()">▶️ 开始训练</button>' +
+            '</div>' +
+            '<div class="section-desc">' + (dayData.morning.intro || '晨间激活，唤醒身体') + '</div>';
+
+    dayData.morning.items.forEach(function (m, i) {
+      html += moveCardHTML(m, i);
+    });
+
+    if (dayData.morning.mainVideo) {
+      html += videoCardHTML(dayData.morning.mainVideo);
+    }
+
+    // 晚间训练
+    html += '<div style="height:8px;background:var(--huawei-cyan-soft)"></div>';
+    html += '<div class="section-header section-header-with-btn">' +
+              '<div class="section-emoji">🌙</div>' +
+              '<div class="section-title-text">' + dayData.evening.title + '</div>' +
+              '<button class="section-start-btn" onclick="startEveningTraining()">▶️ 开始训练</button>' +
+            '</div>' +
+            '<div class="section-desc">' + (dayData.evening.intro || '晚间主课，深度训练') + '</div>';
+
+    if (plan) {
+      plan.moves.forEach(function (m, i) {
+        html += moveCardHTML(m, i);
+      });
+
+      if (dayData.evening.mainVideo) {
+        html += videoCardHTML(dayData.evening.mainVideo);
+      }
+
+      // 冷身拉伸
+      const stretchVid = plan.stretch || 'stretchEleni';
+      html += '<div style="height:8px;background:var(--huawei-cyan-soft)"></div>';
+      html += '<div class="section-header">' +
+                '<div class="section-emoji">🧘</div>' +
+                '<div class="section-title-text">冷身拉伸</div>' +
+              '</div>' +
+              '<div class="section-desc">训练后拉伸，促进恢复</div>' +
+              videoCardHTML(stretchVid);
+    } else {
+      // 恢复日
+      html += '<div class="recovery-tip-huawei">' +
+                '<div class="recovery-tip-icon">🧘</div>' +
+                '<div class="recovery-tip-title">今日为恢复日</div>' +
+                '<div class="recovery-tip-desc">' +
+                  '恢复日不安排高强度训练，以泡沫轴放松、慢速散步、全身拉伸为主。' +
+                  '让肌肉充分恢复，为明天的训练储备能量。记住：恢复也是训练的一部分！' +
+                '</div>' +
+              '</div>';
+      
+      if (dayData.evening.mainVideo) {
+        html += videoCardHTML(dayData.evening.mainVideo);
+      }
+    }
+
+    container.innerHTML = html;
+    renderSafety();
+  }
+
+  function renderSafety() {
+    const card = document.getElementById('safetyCard');
+    if (!FIT.safety) { card.style.display = 'none'; return; }
+    
+    let html = '<div class="safety-header">' +
+                '<div class="safety-icon">⚠️</div>' +
+                '<div class="safety-title">新手安全提示</div>' +
+              '</div>' +
+              '<div class="safety-list">';
+    
+    FIT.safety.forEach(function (s) {
+      html += '<div class="safety-item">' +
+                '<div class="safety-dot"></div>' +
+                '<div>' + s + '</div>' +
+              '</div>';
+    });
+    
+    html += '</div>';
+    card.innerHTML = html;
+  }
+
+  renderTabs();
+  renderToday();
+  renderDay();
+  
+  // ============================================================
+  // 智能训练计时器系统 v3.0
+  // ============================================================
+  window.TrainingTimer = {
+    state: 'idle',
+    currentMoveIndex: 0,
+    currentSet: 1,
+    totalSets: 4,
+    moveName: '',
+    moveReps: '',
+    moveImage: '',
+    moveVideoUrl: '',
+    restSeconds: 60,
+    restRemaining: 60,
+    trainingStartTime: 0,
+    trainingDuration: 0,
+    trainingSeconds: 0,
+    trainingRemaining: 0,
+    totalTrainingTime: 0,
+    totalRemainingSeconds: 0,
+    interval: null,
+    overlay: null,
+    modal: null,
+    moves: [],
+    workoutTitle: '',
+    videoElement: null,
+    
+    init: function(moves, startIndex, title) {
+      this.state = 'idle';
+      this.moves = moves;
+      this.currentMoveIndex = startIndex || 0;
+      this.currentSet = 1;
+      this.trainingDuration = 0;
+      this.totalTrainingTime = 0;
+      this.workoutTitle = title || '训练课程';
+      
+      this.calculateTotalRemaining();
+      this.loadMove();
+    },
+    
+    calculateTotalRemaining: function() {
+      let total = 0;
+      for (let i = this.currentMoveIndex; i < this.moves.length; i++) {
+        const move = this.moves[i];
+        const sets = typeof move === 'object' && move.sets ? parseInt(move.sets) : 3;
+        const rest = typeof move === 'object' && move.rest ? (parseInt(move.rest) * 60 || parseInt(move.rest) || 60) : 60;
+        const moveSets = i === this.currentMoveIndex ? (sets - this.currentSet + 1) : sets;
+        total += moveSets * 60;
+        total += (moveSets - 1) * rest;
+      }
+      this.totalRemainingSeconds = total;
+    },
+    
+    loadMove: function() {
+      const move = this.moves[this.currentMoveIndex];
+      if (!move) return;
+      
+      if (typeof move === 'string') {
+        const parts = move.split(' × ');
+        this.moveName = parts[0] || move;
+        this.moveReps = parts.length > 1 ? parts.slice(1).join(' × ') : '12次';
+        this.moveImage = '';
+        this.localVideo = this.getLocalVideo(this.moveName);
+        this.trainingSeconds = this.parseTimeFromMove(move);
+        if (this.trainingSeconds > 0) {
+          this.totalSets = 1;
+          this.restSeconds = 60;
+        } else {
+          this.totalSets = 3;
+          this.restSeconds = 60;
+        }
+      } else {
+        this.moveName = move.name || '';
+        this.moveReps = move.reps || '12次';
+        this.moveImage = move.image || '';
+        this.localVideo = this.getLocalVideo(this.moveName);
+        this.trainingSeconds = this.parseTimeFromMove(move.name + ' ' + (move.reps || ''));
+        if (this.trainingSeconds > 0) {
+          this.totalSets = 1;
+          this.restSeconds = 60;
+        } else {
+          this.totalSets = move.sets ? parseInt(move.sets) : 4;
+          const rest = move.rest || '60秒';
+          this.restSeconds = parseInt(rest) * 60 || parseInt(rest) || 60;
+        }
+      }
+      this.restRemaining = this.restSeconds;
+      this.trainingRemaining = this.trainingSeconds;
+    },
+    
+    parseTimeFromMove: function(moveStr) {
+      const minRangeMatch = moveStr.match(/(\d+)-(\d+)\s*分钟/);
+      if (minRangeMatch) {
+        const avg = (parseInt(minRangeMatch[1]) + parseInt(minRangeMatch[2])) / 2;
+        return Math.round(avg) * 60;
+      }
+      
+      const minMatch = moveStr.match(/(\d+)\s*分钟/);
+      if (minMatch) return parseInt(minMatch[1]) * 60;
+      
+      const secRangeMatch = moveStr.match(/(\d+)-(\d+)\s*秒/);
+      if (secRangeMatch) {
+        const avg = (parseInt(secRangeMatch[1]) + parseInt(secRangeMatch[2])) / 2;
+        return Math.round(avg);
+      }
+      
+      const secMatch = moveStr.match(/(\d+)\s*秒/);
+      if (secMatch) return parseInt(secMatch[1]);
+      
+      const minNumMatch = moveStr.match(/(\d+)\s*min/);
+      if (minNumMatch) return parseInt(minNumMatch[1]) * 60;
+      
+      const secNumMatch = moveStr.match(/(\d+)\s*s/);
+      if (secNumMatch) return parseInt(secNumMatch[1]);
+      
+      return 0;
+    },
+    
+    getLocalVideo: function(moveName) {
+      try {
+        const data = localStorage.getItem('fitness_videos');
+        if (data) {
+          const videoMap = JSON.parse(data);
+          return videoMap[moveName] || null;
+        }
+      } catch (e) {}
+      return null;
+    },
+    
+    speak: function(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'zh-CN';
+        utterance.rate = 1.0;
+        utterance.pitch = 1.0;
+        utterance.volume = 1.0;
+        window.speechSynthesis.speak(utterance);
+      }
+    },
+    
+    formatTime: function(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return mins.toString().padStart(2, '0') + ':' + secs.toString().padStart(2, '0');
+    },
+    
+    show: function() {
+      // 创建遮罩层
+      this.overlay = document.createElement('div');
+      this.overlay.className = 'training-timer-overlay';
+      document.body.appendChild(this.overlay);
+      
+      // 创建弹窗 - 添加到遮罩层内部，这样才能居中显示
+      this.modal = document.createElement('div');
+      this.modal.className = 'training-timer-modal';
+      this.overlay.appendChild(this.modal);
+      
+      this.render();
+      
+      // 点击遮罩不退出，只暂停
+      this.overlay.addEventListener('click', function(e) {
+        if (e.target === this.overlay && TrainingTimer.state === 'training') {
+          TrainingTimer.pause();
+        }
+      });
+    },
+    
+    render: function() {
+      if (!this.modal) return;
+      
+      const isRest = this.state === 'rest';
+      const modalClass = isRest ? 'training-timer-modal timer-rest-mode' : 'training-timer-modal';
+      this.modal.className = modalClass;
+      
+      let mediaHtml = '';
+      const hasLocalVideo = !!this.localVideo;
+      
+      // 总是显示占位符内容，确保不会黑屏
+      mediaHtml = '<div class="timer-video-area">' +
+                  '<div class="timer-video-placeholder" style="display:flex;">' +
+                  '<div class="timer-video-placeholder-icon">💪</div>' +
+                  '<div class="timer-video-placeholder-text">' + this.moveName + '</div>' +
+                  '<div style="font-size:13px;color:rgba(255,255,255,0.4);margin-top:12px;">' + this.moveReps + '</div>' +
+                  (hasLocalVideo ? '<div style="font-size:12px;color:#8BA8A4;margin-top:8px;">✓ 已添加视频</div>' : '<div style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:8px;">请在视频管理中添加视频</div>') +
+                  '</div>';
+      
+      // 如果有视频，添加视频播放器（隐藏，点击后显示）
+      if (hasLocalVideo) {
+        mediaHtml += '<video id="timerVideoPlayer" class="timer-video-player" src="' + this.localVideo.blob + '" loop muted playsinline style="display:none;"></video>' +
+                     '<div class="timer-video-controls" id="timerVideoControls">' +
+                     '<button class="timer-play-btn" id="timerPlayBtn" onclick="TrainingTimer.toggleVideo()">▶️ 播放视频</button>' +
+                     '</div>';
+      }
+      
+      mediaHtml += '</div>';
+      
+      let movesListHtml = '<div class="timer-moves-list">';
+      for (let i = 0; i < this.moves.length; i++) {
+        const move = this.moves[i];
+        const name = typeof move === 'string' ? move : (move.name || '');
+        let itemClass = 'timer-move-item';
+        if (i < this.currentMoveIndex) itemClass += ' completed';
+        if (i === this.currentMoveIndex) itemClass += ' active';
+        
+        const num = i + 1;
+        const displayName = name.length > 10 ? name.substring(0, 10) + '...' : name;
+        
+        movesListHtml += '<div class="' + itemClass + '" onclick="TrainingTimer.jumpToMove(' + i + ')">' +
+                         '<div class="timer-move-item-num">' + num + '</div>' +
+                         '<div class="timer-move-item-name">' + displayName + '</div>' +
+                         '</div>';
+      }
+      movesListHtml += '</div>';
+      
+      let buttonsHtml = '';
+      if (this.state === 'training') {
+        buttonsHtml = '<div class="timer-controls">' +
+                      '<button class="timer-btn timer-btn-primary" id="btnComplete">✅ 完成本组</button>' +
+                      '<button class="timer-btn timer-btn-secondary" id="btnPause">⏸️</button>' +
+                      '<button class="timer-btn timer-btn-exit" id="btnExit">✕</button>' +
+                      '</div>';
+      } else if (this.state === 'rest') {
+        buttonsHtml = '<div class="timer-controls">' +
+                      '<button class="timer-btn timer-btn-primary" id="btnSkipRest">⏭️ 跳过休息</button>' +
+                      '<button class="timer-btn timer-btn-exit" id="btnExit">✕</button>' +
+                      '</div>';
+      } else if (this.state === 'paused') {
+        buttonsHtml = '<div class="timer-controls">' +
+                      '<button class="timer-btn timer-btn-primary" id="btnResume">▶️ 继续训练</button>' +
+                      '<button class="timer-btn timer-btn-exit" id="btnExit">✕</button>' +
+                      '</div>';
+      } else if (this.state === 'finished') {
+        buttonsHtml = '<div class="timer-controls">' +
+                      '<button class="timer-btn timer-btn-primary" id="btnClose">🎉 完成训练</button>' +
+                      '</div>';
+      }
+      
+      let remainingDisplay = '';
+      if (this.state === 'training') {
+        if (this.trainingSeconds > 0 && this.trainingRemaining > 0) {
+          remainingDisplay = this.formatTime(this.trainingRemaining);
+        } else {
+          remainingDisplay = this.formatTime(this.trainingDuration);
+        }
+      } else if (this.state === 'rest') {
+        remainingDisplay = this.formatTime(this.restRemaining);
+      } else {
+        remainingDisplay = '--:--';
+      }
+      
+      const setProgress = (this.currentSet - 1) / this.totalSets * 100;
+      
+      const totalSetsAll = this.moves.reduce(function(sum, m) {
+        return sum + (typeof m === 'object' && m.sets ? parseInt(m.sets) : 4);
+      }, 0);
+      const completedBefore = this.moves.slice(0, this.currentMoveIndex).reduce(function(sum, m) {
+        return sum + (typeof m === 'object' && m.sets ? parseInt(m.sets) : 4);
+      }, 0);
+      const totalProgress = ((completedBefore + (this.currentSet - 1)) / totalSetsAll) * 100;
+      
+      const setInfoText = this.trainingSeconds > 0 ? '计时训练' : ('第' + this.currentSet + '组（剩余' + (this.totalSets - this.currentSet) + '组）');
+      const repsDisplay = isRest ? '休息中' : ('× ' + this.moveReps);
+      
+      this.modal.innerHTML =
+        '<div class="timer-top-bar">' +
+        '<div class="timer-workout-title">' + this.workoutTitle + '</div>' +
+        '<div class="timer-remaining">' +
+        '<span class="timer-remaining-num">' + remainingDisplay + '</span>' +
+        '<span class="timer-remaining-unit">' + (this.state === 'rest' ? '休息' : '剩余') + '</span>' +
+        '</div>' +
+        '</div>' +
+        '<div class="timer-total-progress">' +
+        '<div class="timer-total-progress-bar" style="width:' + totalProgress + '%"></div>' +
+        '</div>' +
+        mediaHtml +
+        '<div class="timer-current-move">' +
+        '<div class="timer-current-move-row">' +
+        '<div class="timer-current-move-name">' + this.moveName + '</div>' +
+        '<div class="timer-current-move-reps">' + repsDisplay + '</div>' +
+        '</div>' +
+        '<div class="timer-current-set-info">' + setInfoText + '</div>' +
+        '<div class="timer-set-progress">' +
+        '<div class="timer-set-progress-bar" style="width:' + setProgress + '%"></div>' +
+        '</div>' +
+        '</div>' +
+        movesListHtml +
+        buttonsHtml;
+      
+      this.bindEvents();
+    },
+    
+    bindEvents: function() {
+      const btnComplete = document.getElementById('btnComplete');
+      const btnPause = document.getElementById('btnPause');
+      const btnResume = document.getElementById('btnResume');
+      const btnExit = document.getElementById('btnExit');
+      const btnSkipRest = document.getElementById('btnSkipRest');
+      const btnClose = document.getElementById('btnClose');
+      
+      if (btnComplete) btnComplete.addEventListener('click', function() { TrainingTimer.completeSet(); });
+      if (btnPause) btnPause.addEventListener('click', function() { TrainingTimer.pause(); });
+      if (btnResume) btnResume.addEventListener('click', function() { TrainingTimer.resume(); });
+      if (btnExit) btnExit.addEventListener('click', function() { TrainingTimer.exit(); });
+      if (btnSkipRest) btnSkipRest.addEventListener('click', function() { TrainingTimer.skipRest(); });
+      if (btnClose) btnClose.addEventListener('click', function() { TrainingTimer.exit(); });
+    },
+    
+    jumpToMove: function(index) {
+      if (index < 0 || index >= this.moves.length) return;
+      
+      this.currentMoveIndex = index;
+      this.currentSet = 1;
+      this.state = 'training';
+      
+      this.loadMove();
+      this.calculateTotalRemaining();
+      this.render();
+      
+      this.speak('切换到' + this.moveName);
+      
+      this.startTimer();
+      this.autoPlayVideo();
+    },
+    
+    start: function() {
+      this.state = 'training';
+      this.trainingStartTime = Date.now();
+      this.currentSet = 1;
+      
+      this.speak('开始训练：' + this.moveName);
+      
+      this.show();
+      this.startTimer();
+      this.autoPlayVideo();
+    },
+    
+    autoPlayVideo: function() {
+      var _this = this;
+      setTimeout(function() {
+        var video = document.getElementById('timerVideoPlayer');
+        if (video && _this.localVideo) {
+          video.play().catch(function() {});
+        }
+      }, 500);
+    },
+    
+    toggleVideo: function() {
+      var video = document.getElementById('timerVideoPlayer');
+      var placeholder = document.querySelector('.timer-video-placeholder');
+      var btn = document.getElementById('timerPlayBtn');
+      if (!video || !placeholder) return;
+      
+      if (video.style.display === 'none') {
+        video.style.display = 'block';
+        placeholder.style.display = 'none';
+        video.play().catch(function() {});
+        if (btn) btn.textContent = '⏸️ 暂停';
+      } else {
+        video.pause();
+        video.style.display = 'none';
+        placeholder.style.display = 'flex';
+        if (btn) btn.textContent = '▶️ 播放视频';
+      }
+    },
+    
+    startTimer: function() {
+      this.stopTimer();
+      this.interval = setInterval(function() {
+        if (TrainingTimer.state === 'training') {
+          TrainingTimer.trainingDuration = Math.floor((Date.now() - TrainingTimer.trainingStartTime) / 1000);
+          if (TrainingTimer.trainingSeconds > 0 && TrainingTimer.trainingRemaining > 0) {
+            TrainingTimer.trainingRemaining--;
+            if (TrainingTimer.trainingRemaining <= 0) {
+              TrainingTimer.completeSet();
+              return;
+            }
+          }
+          if (TrainingTimer.totalRemainingSeconds > 0) {
+            TrainingTimer.totalRemainingSeconds = Math.max(0, TrainingTimer.totalRemainingSeconds - 1);
+          }
+        } else if (TrainingTimer.state === 'rest') {
+          TrainingTimer.restRemaining--;
+          if (TrainingTimer.totalRemainingSeconds > 0) {
+            TrainingTimer.totalRemainingSeconds = Math.max(0, TrainingTimer.totalRemainingSeconds - 1);
+          }
+          if (TrainingTimer.restRemaining <= 0) {
+            TrainingTimer.finishRest();
+            return;
+          }
+          if (TrainingTimer.restRemaining <= 5 && TrainingTimer.restRemaining > 0) {
+            TrainingTimer.speak(TrainingTimer.restRemaining.toString());
+          }
+        }
+        TrainingTimer.render();
+      }, 1000);
+    },
+    
+    stopTimer: function() {
+      if (this.interval) {
+        clearInterval(this.interval);
+        this.interval = null;
+      }
+    },
+    
+    pause: function() {
+      this.state = 'paused';
+      this.stopTimer();
+      this.speak('训练已暂停');
+      this.render();
+    },
+    
+    resume: function() {
+      this.state = 'training';
+      this.trainingStartTime = Date.now() - (this.trainingDuration * 1000);
+      this.speak('继续训练');
+      this.startTimer();
+    },
+    
+    completeSet: function() {
+      this.stopTimer();
+      this.totalTrainingTime += this.trainingDuration;
+      
+      if (this.trainingSeconds > 0) {
+        this.speak(this.moveName + ' 训练完成');
+        
+        this.currentMoveIndex++;
+        
+        if (this.currentMoveIndex >= this.moves.length) {
+          this.finishAll();
+        } else {
+          this.loadMove();
+          this.currentSet = 1;
+          this.state = 'training';
+          this.trainingStartTime = Date.now();
+          this.trainingDuration = 0;
+          this.speak('开始训练：' + this.moveName);
+          this.render();
+          this.startTimer();
+          this.autoPlayVideo();
+        }
+      } else {
+        this.speak('完成第' + this.currentSet + '组');
+        
+        if (this.currentSet >= this.totalSets) {
+          this.speak(this.moveName + ' 训练完成');
+          this.currentMoveIndex++;
+          
+          if (this.currentMoveIndex >= this.moves.length) {
+            this.finishAll();
+          } else {
+            this.loadMove();
+            this.currentSet = 1;
+            this.startRest();
+          }
+        } else {
+          this.startRest();
+        }
+      }
+    },
+    
+    startRest: function() {
+      this.state = 'rest';
+      this.restRemaining = this.restSeconds;
+      this.speak('开始休息，休息时间' + (this.restSeconds >= 60 ? (this.restSeconds / 60) + '分钟' : this.restSeconds + '秒'));
+      this.trainingDuration = 0;
+      this.render();
+      this.startTimer();
+    },
+    
+    finishRest: function() {
+      this.stopTimer();
+      this.currentSet++;
+      this.speak('休息结束，开始第' + this.currentSet + '组');
+      this.state = 'training';
+      this.trainingStartTime = Date.now();
+      this.trainingDuration = 0;
+      this.render();
+      this.startTimer();
+    },
+    
+    skipRest: function() {
+      this.finishRest();
+    },
+    
+    finishAll: function() {
+      this.state = 'finished';
+      this.stopTimer();
+      this.speak('恭喜你，今日训练全部完成！总训练时长' + Math.floor(this.totalTrainingTime / 60) + '分钟');
+      this.render();
+    },
+    
+    exit: function() {
+      this.stopTimer();
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      if (this.overlay) {
+        this.overlay.remove();
+        this.overlay = null;
+      }
+      if (this.modal) {
+        this.modal.remove();
+        this.modal = null;
+      }
+      this.state = 'idle';
+    }
+  };
+  
+  window.startTrainingTimer = function(moves, index, title) {
+    TrainingTimer.init(moves, index, title);
+    TrainingTimer.start();
+  };
+  
+  window.startTrainingFromCard = function(index) {
+    const dayData = FIT.weekly.find(function (d) { return d.day === currentDay; });
+    if (!dayData) return;
+    const plan = FIT.plans[dayData.evening.planKey];
+    if (!plan || !plan.moves) return;
+    
+    const allMoves = plan.moves;
+    window.startTrainingTimer(allMoves, index, plan.title);
+  };
+  
+  window.startMorningTraining = function() {
+    const dayData = FIT.weekly.find(function (d) { return d.day === currentDay; });
+    if (!dayData || !dayData.morning || !dayData.morning.items) return;
+    window.startTrainingTimer(dayData.morning.items, 0, dayData.morning.title);
+  };
+  
+  window.startEveningTraining = function() {
+    const dayData = FIT.weekly.find(function (d) { return d.day === currentDay; });
+    if (!dayData) return;
+    const plan = FIT.plans[dayData.evening.planKey];
+    if (!plan || !plan.moves) return;
+    window.startTrainingTimer(plan.moves, 0, dayData.evening.title);
+  };
+  
+})();
+</script>
+</body>
+</html>
