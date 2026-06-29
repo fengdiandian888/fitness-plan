@@ -152,7 +152,7 @@ const FIT = {
       bittermelon: { name: '苦瓜', protein: 1, calories: 18, weight: 100, season: ['summer'] },
       okra: { name: '秋葵', protein: 2, calories: 30, weight: 100, season: ['summer'] },
       zucchini: { name: '西葫芦', protein: 1, calories: 17, weight: 100, season: ['summer'] },
-      chinese cabbage: { name: '大白菜', protein: 1, calories: 18, weight: 100, season: ['autumn', 'winter'] },
+      'chinese cabbage': { name: '大白菜', protein: 1, calories: 18, weight: 100, season: ['autumn', 'winter'] },
       carrot: { name: '胡萝卜', protein: 1, calories: 41, weight: 100, season: ['autumn', 'winter'] },
       turnip: { name: '白萝卜', protein: 1, calories: 20, weight: 100, season: ['winter'] }
     },
