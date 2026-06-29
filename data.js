@@ -181,8 +181,6 @@ const FIT = {
   }
 };
 
-var userProfile = loadUserProfile();
-
 /* ============================================================
    视频链接注册表（v3.4 B站+YouTube+GIF三平台）
    合并 jf-1 的 B 站视频数据 + MuscleWiki YouTube 视频 + GIF 动画
