@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>减脂教练 · 用户画像</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+  .onboarding-container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 24px 16px;
+    padding-top: 40px;
+  }
+  .step-indicator {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+  .step-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: all 0.3s;
+  }
+  .step-dot.active {
+    width: 24px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #fb923c, #f97316);
+  }
+  .form-group {
+    margin-bottom: 18px;
+  }
+  .form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-strong);
+    margin-bottom: 6px;
+  }
+  .form-group input {
+    width: 100%;
+    padding: 12px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+    background: var(--card);
+  }
+  .form-group input:focus {
+    border-color: #fb923c;
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+  }
+  .radio-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .radio-option {
+    padding: 14px;
+    border-radius: var(--radius);
+    border: 2px solid var(--border);
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--card);
+  }
+  .radio-option:hover {
+    border-color: var(--primary);
+  }
+  .radio-option.selected {
+    border-color: #fb923c;
+    background: linear-gradient(135deg, #fff7ed, #ffedd5);
+    box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.1);
+  }
+  .radio-option span {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-strong);
+  }
+  .radio-option small {
+    display: block;
+    font-size: 11px;
+    color: var(--sub);
+    margin-top: 2px;
+  }
+  .btn-nav {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+  }
+  .btn-nav .btn {
+    flex: 1;
+  }
+  .result-card {
+    background: var(--card);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    margin-top: 16px;
+    border: 1px solid var(--border);
+  }
+  .result-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--border);
+  }
+  .result-row:last-child {
+    border-bottom: none;
+  }
+  .result-label {
+    font-size: 13px;
+    color: var(--sub);
+  }
+  .result-value {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-strong);
+  }
+  .result-value.primary {
+    color: #f97316;
+  }
+  .bmi-badge {
+    display: inline-flex;
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .bmi-normal { background: #dcfce7; color: #166534; }
+  .bmi-overweight { background: #fef3c7; color: #92400e; }
+  .bmi-obese { background: #fee2e2; color: #991b1b; }
+</style>
+</head>
+<body>
+<div class="onboarding-container">
+  <div class="card hero-card" style="text-align:center;margin-bottom:24px">
+    <h1>👤 创建你的健身档案</h1>
+    <div class="hero-sub">输入个人信息，生成专属训练计划</div>
+  </div>
+
+  <div class="step-indicator">
+    <div class="step-dot active" id="step1"></div>
+    <div class="step-dot" id="step2"></div>
+    <div class="step-dot" id="step3"></div>
+  </div>
+
+  <!-- Step 1: 基本信息 -->
+  <div id="formStep1" class="card" style="display:block">
+    <h3>基本信息</h3>
+    <div class="form-group">
+      <label>性别</label>
+      <div class="radio-group">
+        <div class="radio-option selected" onclick="selectGender('男')" data-value="男">
+          <span>👨 男性</span>
+          <small>新陈代谢较高</small>
+        </div>
+        <div class="radio-option" onclick="selectGender('女')" data-value="女">
+          <span>👩 女性</span>
+          <small>注重塑形</small>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>年龄</label>
+      <input type="number" id="age" placeholder="25" min="15" max="80" value="25">
+    </div>
+    <div class="btn-nav">
+      <button class="btn btn-secondary" onclick="nextStep(1)">跳过</button>
+      <button class="btn btn-primary" onclick="nextStep(1)">下一步 →</button>
+    </div>
+  </div>
+
+  <!-- Step 2: 身体数据 -->
+  <div id="formStep2" class="card" style="display:none">
+    <h3>身体数据</h3>
+    <div class="form-group">
+      <label>身高 (cm)</label>
+      <input type="number" id="height" placeholder="170" min="100" max="250" value="170">
+    </div>
+    <div class="form-group">
+      <label>体重 (kg)</label>
+      <input type="number" id="weight" placeholder="70" min="30" max="200" step="0.1" value="70">
+    </div>
+    <div class="btn-nav">
+      <button class="btn btn-secondary" onclick="prevStep(2)">← 返回</button>
+      <button class="btn btn-primary" onclick="nextStep(2)">下一步 →</button>
+    </div>
+  </div>
+
+  <!-- Step 3: 目标选择 -->
+  <div id="formStep3" class="card" style="display:none">
+    <h3>健身目标</h3>
+    <div class="radio-group">
+      <div class="radio-option selected" onclick="selectGoal('lose')" data-value="lose">
+        <span>🔥 减脂</span>
+        <small>减少体脂率</small>
+      </div>
+      <div class="radio-option" onclick="selectGoal('gain')" data-value="gain">
+        <span>💪 增肌</span>
+        <small>增加肌肉量</small>
+      </div>
+      <div class="radio-option" onclick="selectGoal('maintain')" data-value="maintain">
+        <span>⚖️ 维持</span>
+        <small>保持现有状态</small>
+      </div>
+      <div class="radio-option" onclick="selectGoal('fit')" data-value="fit">
+        <span>🏃 塑形</span>
+        <small>提升身体素质</small>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>每周训练天数</label>
+      <div class="radio-group">
+        <div class="radio-option" onclick="selectDays(3)" data-value="3">
+          <span>3 天</span>
+          <small>新手入门</small>
+        </div>
+        <div class="radio-option selected" onclick="selectDays(5)" data-value="5">
+          <span>5 天</span>
+          <small>标准训练</small>
+        </div>
+        <div class="radio-option" onclick="selectDays(6)" data-value="6">
+          <span>6 天</span>
+          <small>进阶训练</small>
+        </div>
+      </div>
+    </div>
+    <div class="btn-nav">
+      <button class="btn btn-secondary" onclick="prevStep(3)">← 返回</button>
+      <button class="btn btn-primary" onclick="calculateAndSave()">完成创建 →</button>
+    </div>
+  </div>
+
+  <!-- Result Preview -->
+  <div id="resultPreview" class="card" style="display:none">
+    <h3>📊 你的专属方案</h3>
+    <div class="result-card">
+      <div class="result-row">
+        <span class="result-label">你的信息</span>
+        <span class="result-value"><span id="resGender">男</span> · <span id="resAge">25</span>岁 · <span id="resHeight">170</span>cm</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">当前体重</span>
+        <span class="result-value primary"><span id="resWeight">70</span> kg</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">BMI 指数</span>
+        <span class="result-value"><span id="resBMI">24.2</span> <span id="bmiBadge" class="bmi-badge">正常</span></span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">每日消耗</span>
+        <span class="result-value"><span id="resTDEE">2000</span> 千卡</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">每日摄入目标</span>
+        <span class="result-value primary"><span id="resCalories">1600</span> 千卡</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">蛋白质目标</span>
+        <span class="result-value"><span id="resProtein">105</span> g</span>
+      </div>
+    </div>
+    <button class="btn btn-primary btn-block" onclick="goToHome()">开始健身之旅</button>
+  </div>
+</div>
+
+<script>
+var currentStep = 1;
+var userProfile = {
+  gender: '男',
+  age: 25,
+  height: 170,
+  weight: 70,
+  goal: 'lose',
+  days: 5
+};
+
+function selectGender(gender) {
+  document.querySelectorAll('#formStep1 .radio-option').forEach(function(el) {
+    el.classList.remove('selected');
+  });
+  event.currentTarget.classList.add('selected');
+  userProfile.gender = gender;
+}
+
+function selectGoal(goal) {
+  document.querySelectorAll('#formStep3 .radio-option').forEach(function(el) {
+    if (el.getAttribute('onclick').includes('selectGoal')) {
+      el.classList.remove('selected');
+    }
+  });
+  event.currentTarget.classList.add('selected');
+  userProfile.goal = goal;
+}
+
+function selectDays(days) {
+  document.querySelectorAll('#formStep3 .radio-option').forEach(function(el) {
+    if (el.getAttribute('onclick').includes('selectDays')) {
+      el.classList.remove('selected');
+    }
+  });
+  event.currentTarget.classList.add('selected');
+  userProfile.days = days;
+}
+
+function nextStep(step) {
+  if (step === 1) {
+    userProfile.age = parseInt(document.getElementById('age').value) || 25;
+    document.getElementById('formStep1').style.display = 'none';
+    document.getElementById('formStep2').style.display = 'block';
+    document.getElementById('step1').classList.remove('active');
+    document.getElementById('step2').classList.add('active');
+    currentStep = 2;
+  } else if (step === 2) {
+    userProfile.height = parseInt(document.getElementById('height').value) || 170;
+    userProfile.weight = parseFloat(document.getElementById('weight').value) || 70;
+    document.getElementById('formStep2').style.display = 'none';
+    document.getElementById('formStep3').style.display = 'block';
+    document.getElementById('step2').classList.remove('active');
+    document.getElementById('step3').classList.add('active');
+    currentStep = 3;
+  }
+}
+
+function prevStep(step) {
+  if (step === 2) {
+    document.getElementById('formStep2').style.display = 'none';
+    document.getElementById('formStep1').style.display = 'block';
+    document.getElementById('step2').classList.remove('active');
+    document.getElementById('step1').classList.add('active');
+    currentStep = 1;
+  } else if (step === 3) {
+    document.getElementById('formStep3').style.display = 'none';
+    document.getElementById('formStep2').style.display = 'block';
+    document.getElementById('step3').classList.remove('active');
+    document.getElementById('step2').classList.add('active');
+    currentStep = 2;
+  }
+}
+
+function calculateAndSave() {
+  var bmi = userProfile.weight / Math.pow(userProfile.height / 100, 2);
+  
+  var bmr;
+  if (userProfile.gender === '男') {
+    bmr = 10 * userProfile.weight + 6.25 * userProfile.height - 5 * userProfile.age + 5;
+  } else {
+    bmr = 10 * userProfile.weight + 6.25 * userProfile.height - 5 * userProfile.age - 161;
+  }
+  
+  var activityFactor = userProfile.days === 3 ? 1.375 : (userProfile.days === 5 ? 1.55 : 1.725);
+  var tdee = Math.round(bmr * activityFactor);
+  
+  var calories;
+  if (userProfile.goal === 'lose') {
+    calories = tdee - 400;
+  } else if (userProfile.goal === 'gain') {
+    calories = tdee + 300;
+  } else {
+    calories = tdee;
+  }
+  
+  var protein = Math.round(userProfile.weight * 1.5);
+  
+  document.getElementById('resGender').textContent = userProfile.gender;
+  document.getElementById('resAge').textContent = userProfile.age;
+  document.getElementById('resHeight').textContent = userProfile.height;
+  document.getElementById('resWeight').textContent = userProfile.weight;
+  document.getElementById('resBMI').textContent = bmi.toFixed(1);
+  
+  var bmiBadge = document.getElementById('bmiBadge');
+  if (bmi < 18.5) {
+    bmiBadge.textContent = '偏瘦';
+    bmiBadge.className = 'bmi-badge';
+    bmiBadge.style.background = '#dbeafe';
+    bmiBadge.style.color = '#1e40af';
+  } else if (bmi < 24) {
+    bmiBadge.textContent = '正常';
+    bmiBadge.className = 'bmi-badge bmi-normal';
+  } else if (bmi < 28) {
+    bmiBadge.textContent = '超重';
+    bmiBadge.className = 'bmi-badge bmi-overweight';
+  } else {
+    bmiBadge.textContent = '肥胖';
+    bmiBadge.className = 'bmi-badge bmi-obese';
+  }
+  
+  document.getElementById('resTDEE').textContent = tdee;
+  document.getElementById('resCalories').textContent = calories;
+  document.getElementById('resProtein').textContent = protein;
+  
+  document.getElementById('formStep3').style.display = 'none';
+  document.getElementById('resultPreview').style.display = 'block';
+  
+  var targetMin = Math.round(userProfile.weight * 0.85);
+  var targetMax = Math.round(userProfile.weight * 0.92);
+  
+  localStorage.setItem('fit_user_profile', JSON.stringify({
+    gender: userProfile.gender,
+    age: userProfile.age,
+    height: userProfile.height,
+    weight: userProfile.weight,
+    startWeight: userProfile.weight,
+    goal: userProfile.goal,
+    days: userProfile.days,
+    bmi: bmi.toFixed(1),
+    tdee: tdee,
+    calories: calories,
+    protein: protein,
+    targetMin: targetMin,
+    targetMax: targetMax
+  }));
+  
+  localStorage.setItem('fit_onboarding_done', 'true');
+}
+
+function goToHome() {
+  window.location.href = 'index.html';
+}
+</script>
+</body>
+</html>

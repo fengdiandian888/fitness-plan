@@ -1,18 +1,47 @@
 /* ============================================================
-   减脂计划 · 共享数据源 v3.0
-   装备：拉力绳 + 瑜伽垫 + 跳绳 + 2×20KG 可组合哑铃（可做杠铃）
-   适用人群：男性 · 170cm · 83.25kg · 新手 · 肩袖需要保护
+   减脂计划 · 共享数据源 v4.0（支持自定义用户画像）
+   装备：哑铃 + 瑜伽垫 + 跳绳
+   用户画像：从 localStorage 动态加载，支持自定义身高体重性别年龄
    ============================================================ */
+
+function loadUserProfile() {
+  var defaultProfile = {
+    gender: '男',
+    age: 25,
+    height: 170,
+    weight: 70,
+    startWeight: 70,
+    goal: 'lose',
+    days: 5,
+    bmi: 24.2,
+    tdee: 2000,
+    calories: 1600,
+    protein: 105,
+    targetMin: 59,
+    targetMax: 64
+  };
+  try {
+    var saved = localStorage.getItem('fit_user_profile');
+    if (saved) {
+      return JSON.parse(saved);
+    }
+  } catch(e) {}
+  return defaultProfile;
+}
+
+var userProfile = loadUserProfile();
 
 // ============ 核心指标（所有页面唯一来源）============
 const FIT = {
   metrics: {
-    protein: 110,       // 每日蛋白质目标（g）大体重需更高
-    proteinBreakfast: 30,
-    proteinLunch: 25,
-    proteinDinner: 55,
-    water: '3.0L',
-    waterCount: 6,
+    protein: userProfile.protein || 110,
+    proteinBreakfast: Math.round((userProfile.protein || 110) * 0.27),
+    proteinLunch: Math.round((userProfile.protein || 110) * 0.23),
+    proteinDinner: Math.round((userProfile.protein || 110) * 0.5),
+    calories: userProfile.calories || 1600,
+    tdee: userProfile.tdee || 2000,
+    water: (Math.max(2, Math.round(userProfile.weight / 20))).toFixed(1) + 'L',
+    waterCount: Math.max(4, Math.round(userProfile.weight / 17)),
     waterPer: '500ml',
     sleepHours: 7.5,
     sleepBed: '23:30',
@@ -20,15 +49,16 @@ const FIT = {
     exercise: '75′'
   },
   body: {
-    gender: '男',
-    height: 170,
-    weight: 83.25,
-    startWeight: 85,
-    bmi: 28.7,
-    targetMin: 68,
-    targetMax: 72,
-    location: '株洲 · 石峰区',
-    commute: '小电动通勤'
+    gender: userProfile.gender || '男',
+    age: userProfile.age || 25,
+    height: userProfile.height || 170,
+    weight: userProfile.weight || 70,
+    startWeight: userProfile.startWeight || 70,
+    bmi: parseFloat(userProfile.bmi) || 24.2,
+    targetMin: userProfile.targetMin || 59,
+    targetMax: userProfile.targetMax || 64,
+    goal: userProfile.goal || 'lose',
+    days: userProfile.days || 5
   },
 
   // ============ 装备信息 ============
@@ -42,27 +72,32 @@ const FIT = {
 
   // ============ 晚餐默认配比 ============
   dinner: {
-    protein: '260g',
+    protein: Math.round(userProfile.weight * 3.2) + 'g',
     veg: '300g',
     carb: '50g 内',
     proteinOpts: '鸡胸肉 / 瘦牛肉（腿日用牛肉）/ 鱼虾',
     vegOpts: '黄瓜 / 丝瓜 / 菠菜 / 生菜 / 苋菜 / 西红柿',
     carbOpts: '半根玉米 80g / 小块南瓜 200g / 半个红薯 100g',
-    note: '不吃西兰花'
+    note: ''
   },
 
   // ============ 每日标签 & 训练类型 ============
   dayLabels: ['纯恢复日', '拉日训练', '有氧+核心', '推日训练', '有氧+核心', '腿日训练', '全身哑铃+跳绳'],
   dayKeys:   ['recovery',    'pull',      'cardio',    'push',     'cardio',    'leg',       'fullbody'],
 
-  // ============ 里程碑 ============
-  milestones: [
-    { wt: 85, label: '起点',   time: '' },
-    { wt: 80, label: '',       time: '3–4 周' },
-    { wt: 76, label: '',       time: '6–8 周' },
-    { wt: 72, label: '',       time: '10–14 周' },
-    { wt: 68, label: '目标',   time: '18–22 周' }
-  ],
+  // ============ 里程碑（动态生成）============
+  milestones: (function() {
+    var start = userProfile.startWeight || 70;
+    var target = userProfile.targetMin || 59;
+    var step = (start - target) / 4;
+    return [
+      { wt: Math.round(start), label: '起点', time: '' },
+      { wt: Math.round(start - step), label: '', time: '3–4 周' },
+      { wt: Math.round(start - step * 2), label: '', time: '6–8 周' },
+      { wt: Math.round(start - step * 3), label: '', time: '10–14 周' },
+      { wt: Math.round(target), label: '目标', time: '18–22 周' }
+    ];
+  })(),
 
   // ============ 天气 ============
   weather: {

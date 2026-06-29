@@ -1,19 +1,33 @@
 /* ============================================================
-   减脂教练 App · 共享 JS v2.0
-   用途：Tab 栏注入、B站视频懒加载、通用工具函数
+   减脂教练 App · 共享 JS v4.0
+   用途：Tab 栏注入、B站视频懒加载、通用工具函数、用户画像管理
    使用：页面 <head> 中 <link rel="stylesheet" href="shared.css">
          body 末尾 <script src="shared.js"></script>
    ============================================================ */
 (function (global) {
   'use strict';
 
+  // =========== 检查用户画像引导页 ===========
+  function checkOnboarding() {
+    var currentPage = window.location.pathname.split('/').pop();
+    if (currentPage === 'onboarding.html') return;
+    var done = localStorage.getItem('fit_onboarding_done');
+    if (!done && currentPage !== 'onboarding.html') {
+      window.location.href = 'onboarding.html';
+      return false;
+    }
+    return true;
+  }
+  
+  if (!checkOnboarding()) return;
+
   // =========== 页面元数据（告诉 shared.js 当前页是哪一个）===========
   // 页面自己在 <script> 中设置 window.PAGE_META = { key:'today', dark:false }
   const PAGE = Object.assign(
     {
-      key: 'today',          // home | today | plan | follow | tutorial
+      key: 'today',          // home | today | follow
       dark: false,           // 是否启用深色主题
-      showBottomNav: false,  // 是否显示底部导航
+      showBottomNav: true,   // 是否显示底部导航（默认显示）
       title: '减脂计划'
     },
     global.PAGE_META || {}
@@ -24,44 +38,20 @@
     document.body.classList.add('dark');
   }
 
-  // =========== 导航栏配置 ===========
+  // =========== 导航栏配置（精简为3个导航项）===========
   const NAV_ITEMS = [
-    { key: 'home',      label: '🏠 首页',       href: 'index.html' },
-    { key: 'today',     label: '📋 今日计划',   href: '今日计划.html' },
-    { key: 'diet',      label: '🍽️ 饮食参考',   href: '饮食参考.html' },
-    { key: 'checklist', label: '✅ 必做清单',   href: '每日必做清单.html' },
-
-    { key: 'follow',    label: '💪 训练跟练',   href: '减脂训练日跟练_三分化.html' },
-    { key: 'summary',   label: '📊 每周小结',   href: '每周小结.html' },
-    { key: 'tutorial',  label: '📚 完整教程',   href: '减脂完整教程_饮食运动作息动作库.html' }
+    { key: 'home',   label: '🏠 首页',         href: 'index.html' },
+    { key: 'today',  label: '📋 今日计划',     href: '今日计划.html' },
+    { key: 'follow', label: '💪 训练跟练',     href: '减脂训练日跟练_三分化.html' }
   ];
 
-  // =========== 注入顶部 Tab 栏 ===========
-  function renderTabBar() {
-    // 若页面已有 nav.tab-bar，则不重复注入
-    if (document.querySelector('nav.tab-bar')) return;
-
-    const nav = document.createElement('nav');
-    nav.className = 'tab-bar';
-    NAV_ITEMS.forEach(function (item) {
-      const a = document.createElement('a');
-      a.href = item.href;
-      a.textContent = item.label;
-      if (item.key === PAGE.key) a.classList.add('active');
-      nav.appendChild(a);
-    });
-    // 插入 body 的最前面
-    document.body.insertBefore(nav, document.body.firstChild);
-  }
-
-  // =========== 注入底部导航 ===========
+  // =========== 注入底部导航栏（所有页面都显示）===========
   function renderBottomNav() {
-    if (!PAGE.showBottomNav) return;
     if (document.querySelector('nav.bottom-nav')) return;
 
     const nav = document.createElement('nav');
-    nav.className = 'tab-bar';
-    nav.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,0.92);backdrop-filter:blur(14px);border-top:1px solid var(--border);border-bottom:none;';
+    nav.className = 'tab-bar bottom-nav';
+    nav.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,0.92);backdrop-filter:blur(14px);border-top:1px solid var(--border);border-bottom:none;z-index:100;';
     NAV_ITEMS.forEach(function (item) {
       const a = document.createElement('a');
       a.href = item.href;
@@ -70,7 +60,6 @@
       nav.appendChild(a);
     });
     document.body.appendChild(nav);
-    // 给 body 加 padding，避免内容被底栏遮挡
     document.body.style.paddingBottom = '68px';
   }
 

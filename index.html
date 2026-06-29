@@ -6,26 +6,111 @@
 <meta name="theme-color" content="#C4A4A4">
 <title>减脂教练 · 首页</title>
 <link rel="stylesheet" href="shared.css">
+<style>
+  .content-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 14px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+  .content-tabs::-webkit-scrollbar { display: none; }
+  .content-tab-btn {
+    flex: 0 0 auto;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: var(--radius-pill);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--sub);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .content-tab-btn.active {
+    background: linear-gradient(135deg, #fb923c, #f97316);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: var(--shadow-primary);
+  }
+  .content-section { display: none; }
+  .content-section.active { display: block; }
+  .ref-food-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px dashed var(--border);
+  }
+  .ref-food-row:last-child { border-bottom: none; }
+  .ref-food-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .ref-food-info { flex: 1; }
+  .ref-food-title { font-weight: 600; font-size: 14px; color: var(--text-strong); }
+  .ref-food-desc { font-size: 12px; color: var(--sub); margin-top: 2px; }
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--border);
+    cursor: pointer;
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-box {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  .check-item.checked .check-box {
+    background: linear-gradient(135deg, #fb923c, #f97316);
+    border-color: transparent;
+  }
+  .check-box::after {
+    content: '✓';
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    opacity: 0;
+  }
+  .check-item.checked .check-box::after { opacity: 1; }
+  .check-text { flex: 1; font-size: 13px; }
+  .check-item.checked .check-text { text-decoration: line-through; color: var(--sub); }
+</style>
 </head>
 <body>
 <script>window.PAGE_META = { key: 'home', dark: false, title: '首页' };</script>
 
 <main class="container">
 
-  <!-- 英雄卡：欢迎 + 快速数据 -->
   <section class="card hero-card" style="text-align:center">
-    <h1>🏋️ 减脂教练</h1>
-    <div class="hero-sub">科学减脂 · 数据驱动 · 持续进步</div>
-
-    <!-- 核心指标 -->
+    <h1>👋 你好，<span id="userName">健身达人</span></h1>
+    <div class="hero-sub" id="userGoal">开始你的健身之旅</div>
+    
     <div class="grid-4" style="gap:8px;margin-top:16px">
-      <div class="metric-box"><span class="metric-val" id="hPlans">9</span><span class="metric-label">训练计划</span></div>
-      <div class="metric-box water"><span class="metric-val" id="hMoves">30+</span><span class="metric-label">动作库</span></div>
-      <div class="metric-box exercise"><span class="metric-val" id="hExercise">—</span><span class="metric-label">今日训练</span></div>
-      <div class="metric-box"><span class="metric-val" id="hWeight">—</span><span class="metric-label">最新体重</span></div>
+      <div class="metric-box"><span class="metric-val" id="hWeight">70</span><span class="metric-label">当前体重</span></div>
+      <div class="metric-box"><span class="metric-val" id="hBMI">24.2</span><span class="metric-label">BMI指数</span></div>
+      <div class="metric-box water"><span class="metric-val" id="hCalories">1600</span><span class="metric-label">每日摄入</span></div>
+      <div class="metric-box exercise"><span class="metric-val" id="hProtein">105</span><span class="metric-label">蛋白质(g)</span></div>
     </div>
 
-    <!-- 体重进度环 -->
     <div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-top:16px;padding-top:12px;border-top:1px dashed rgba(249,115,22,0.2)">
       <div class="progress-ring-overview" id="weightRing" style="--progress:0%">
         <span id="weightPct">0%</span>
@@ -33,72 +118,212 @@
       <div style="text-align:left">
         <div style="font-size:13px;color:var(--sub)">减重进度</div>
         <div style="font-size:16px;font-weight:700;color:var(--text-strong)" id="weightRange">—</div>
-        <div style="font-size:11.5px;color:#22c55e" id="weightTarget">目标 68–72kg</div>
+        <div style="font-size:11.5px;color:#22c55e" id="weightTarget">目标 — kg</div>
       </div>
     </div>
+
+    <button class="btn btn-secondary" style="margin-top:16px" onclick="editProfile()">编辑个人信息</button>
   </section>
 
-  <!-- 快速导航 -->
-  <section class="card">
-    <h3>🚀 快速开始</h3>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:8px">
-      <a class="metric-box" href="今日计划.html" style="text-decoration:none;color:inherit;display:block;cursor:pointer">
-        <div style="font-size:24px">📅</div>
-        <div style="font-weight:700;color:#f5f5f5;margin-top:4px">今日计划</div>
-        <div style="font-size:12px;color:#9ca3af;margin-top:2px">时间轴 · 体重 · 日志</div>
-      </a>
-      <a class="metric-box" href="减脂训练日跟练_三分化.html" style="text-decoration:none;color:inherit;display:block;cursor:pointer">
-        <div style="font-size:24px">💪</div>
-        <div style="font-weight:700;color:#f5f5f5;margin-top:4px">训练日跟练</div>
-        <div style="font-size:12px;color:#9ca3af;margin-top:2px">9 个计划 · 动作勾选</div>
-      </a>
-      <a class="metric-box" href="减脂完整教程_饮食运动作息动作库.html" style="text-decoration:none;color:inherit;display:block;cursor:pointer">
-        <div style="font-size:24px">📚</div>
-        <div style="font-weight:700;color:#f5f5f5;margin-top:4px">完整教程</div>
-        <div style="font-size:12px;color:#9ca3af;margin-top:2px">饮食 · 训练 · 作息</div>
-      </a>
-    </div>
-  </section>
+  <div class="content-tabs">
+    <button class="content-tab-btn active" onclick="switchTab('diet')">🍽️ 饮食参考</button>
+    <button class="content-tab-btn" onclick="switchTab('checklist')">✅ 必做清单</button>
+    <button class="content-tab-btn" onclick="switchTab('training')">💪 本周训练</button>
+    <button class="content-tab-btn" onclick="switchTab('summary')">📊 每周小结</button>
+    <button class="content-tab-btn" onclick="switchTab('tutorial')">📚 健身教程</button>
+  </div>
 
-  <!-- 本周训练预告 -->
-  <section class="card">
-    <div class="flex-between">
-      <h3>📅 本周训练预告</h3>
-      <span class="badge badge-info">周计划</span>
-    </div>
-    <div style="margin-top:8px">
-      <div id="weeklyPreview"></div>
-    </div>
-  </section>
+  <!-- 饮食参考 -->
+  <div id="tab-diet" class="content-section active">
+    <section class="card">
+      <h3>🍳 早餐推荐</h3>
+      <div class="ref-food-row">
+        <div class="ref-food-icon">🥚</div>
+        <div class="ref-food-info">
+          <div class="ref-food-title">水煮蛋 + 全麦面包</div>
+          <div class="ref-food-desc">2个鸡蛋 + 2片全麦面包 + 一杯牛奶</div>
+        </div>
+      </div>
+      <div class="ref-food-row">
+        <div class="ref-food-icon">🥛</div>
+        <div class="ref-food-info">
+          <div class="ref-food-title">蛋白质奶昔</div>
+          <div class="ref-food-desc">蛋白粉一勺 + 香蕉一根 + 牛奶</div>
+        </div>
+      </div>
+      <div class="ref-food-row">
+        <div class="ref-food-icon">🥗</div>
+        <div class="ref-food-info">
+          <div class="ref-food-title">燕麦碗</div>
+          <div class="ref-food-desc">燕麦50g + 酸奶200ml + 坚果一小把</div>
+        </div>
+      </div>
+    </section>
 
-  <!-- 激励卡片 -->
-  <section class="motivation-card">
-    <div class="motiv-icon" id="motivIcon">🔥</div>
-    <div class="motiv-text" id="motivText">加载中…</div>
-    <div class="motiv-author" id="motivAuthor"></div>
-  </section>
+    <section class="card">
+      <h3>🍖 午餐推荐</h3>
+      <div class="ref-food-row">
+        <div class="ref-food-icon">🍗</div>
+        <div class="ref-food-info">
+          <div class="ref-food-title">鸡胸肉套餐</div>
+          <div class="ref-food-desc">鸡胸肉200g + 糙米100g + 蔬菜200g</div>
+        </div>
+      </div>
+      <div class="ref-food-row">
+        <div class="ref-food-icon">🥩</div>
+        <div class="ref-food-info">
+          <div class="ref-food-title">瘦牛肉套餐</div>
+          <div class="ref-food-desc">瘦牛肉180g + 红薯100g + 西兰花</div>
+        </div>
+      </div>
+      <div class="ref-food-row">
+        <div class="ref-food-icon">🐟</div>
+        <div class="ref-food-info">
+          <div class="ref-food-title">鱼虾套餐</div>
+          <div class="ref-food-desc">三文鱼150g + 玉米半根 + 菠菜</div>
+        </div>
+      </div>
+    </section>
 
-  <!-- 今日训练提示 -->
-  <section class="card">
-    <h3>📊 今日训练</h3>
-    <div id="todayTrainingCard" style="margin-top:8px"></div>
-  </section>
+    <section class="card">
+      <h3>🥗 晚餐推荐</h3>
+      <div class="ref-food-row">
+        <div class="ref-food-icon">🥦</div>
+        <div class="ref-food-info">
+          <div class="ref-food-title">蔬菜鸡胸沙拉</div>
+          <div class="ref-food-desc">鸡胸肉150g + 黄瓜/西红柿/生菜</div>
+        </div>
+      </div>
+      <div class="ref-food-row">
+        <div class="ref-food-icon">🥑</div>
+        <div class="ref-food-info">
+          <div class="ref-food-title">牛油果虾仁</div>
+          <div class="ref-food-desc">虾仁150g + 牛油果半个 + 水煮蛋</div>
+        </div>
+      </div>
+    </section>
+  </div>
 
-  <!-- 训练小贴士 -->
-  <section class="card">
-    <h3>💡 训练小贴士</h3>
-    <div id="tipsContainer">
+  <!-- 必做清单 -->
+  <div id="tab-checklist" class="content-section">
+    <section class="card">
+      <div class="flex-between">
+        <h3>📋 今日必做</h3>
+        <span class="badge" id="checkProgress">0/6</span>
+      </div>
+      <div id="checklistItems">
+        <div class="check-item" onclick="toggleCheck(0)">
+          <div class="check-box"></div>
+          <span class="check-text">喝够 <span id="waterTarget">6</span> 杯水</span>
+        </div>
+        <div class="check-item" onclick="toggleCheck(1)">
+          <div class="check-box"></div>
+          <span class="check-text">完成今日训练计划</span>
+        </div>
+        <div class="check-item" onclick="toggleCheck(2)">
+          <div class="check-box"></div>
+          <span class="check-text">摄入 <span id="proteinTarget">105</span>g 蛋白质</span>
+        </div>
+        <div class="check-item" onclick="toggleCheck(3)">
+          <div class="check-box"></div>
+          <span class="check-text">睡眠 <span id="sleepTarget">7.5</span> 小时</span>
+        </div>
+        <div class="check-item" onclick="toggleCheck(4)">
+          <div class="check-box"></div>
+          <span class="check-text">记录今日体重</span>
+        </div>
+        <div class="check-item" onclick="toggleCheck(5)">
+          <div class="check-box"></div>
+          <span class="check-text">训练后拉伸 10 分钟</span>
+        </div>
+      </div>
+      <button class="btn btn-secondary btn-block" style="margin-top:12px" onclick="resetChecklist()">重置清单</button>
+    </section>
+  </div>
+
+  <!-- 本周训练 -->
+  <div id="tab-training" class="content-section">
+    <section class="card">
+      <div class="flex-between">
+        <h3>📅 本周训练预告</h3>
+        <a href="减脂训练日跟练_三分化.html" class="badge badge-info">查看详情</a>
+      </div>
+      <div id="weeklyPreview" style="margin-top:8px"></div>
+    </section>
+
+    <section class="card">
+      <h3>🔥 今日训练</h3>
+      <div id="todayTrainingCard"></div>
+    </section>
+  </div>
+
+  <!-- 每周小结 -->
+  <div id="tab-summary" class="content-section">
+    <section class="card">
+      <h3>📊 本周总结</h3>
+      <div class="grid-2" style="gap:10px">
+        <div class="metric-box">
+          <span class="metric-val" id="weekWorkouts">0</span>
+          <span class="metric-label">训练次数</span>
+        </div>
+        <div class="metric-box">
+          <span class="metric-val" id="weekWeight">-</span>
+          <span class="metric-label">体重变化</span>
+        </div>
+        <div class="metric-box water">
+          <span class="metric-val" id="weekCalories">0</span>
+          <span class="metric-label">消耗千卡</span>
+        </div>
+        <div class="metric-box exercise">
+          <span class="metric-val" id="weekDays">7</span>
+          <span class="metric-label">坚持天数</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>💬 本周感受</h3>
+      <textarea id="weekNotes" placeholder="记录本周的训练感受和进步..." style="width:100%;padding:12px;border-radius:var(--radius);border:1px solid var(--border);font-family:inherit;font-size:13px;margin-bottom:10px"></textarea>
+      <button class="btn btn-primary btn-block" onclick="saveWeekNotes()">保存笔记</button>
+    </section>
+  </div>
+
+  <!-- 健身教程 -->
+  <div id="tab-tutorial" class="content-section">
+    <section class="card">
+      <h3>🎯 训练原则</h3>
       <div class="rule-list">
         <li><strong>安全第一：</strong>BMI 28+ 人群避免跳跃动作，选择低冲击有氧</li>
         <li><strong>动作标准：</strong>哑铃重量以能标准完成动作为宜，不追求大重量</li>
-        <li><strong>肩袖保护：</strong>每次训练前必做弹力带肩外旋热身</li>
         <li><strong>循序渐进：</strong>新手前 2 周以熟悉动作为主，不急于加量</li>
+        <li><strong>休息恢复：</strong>肌肉在休息中生长，不要过度训练</li>
+        <li><strong>营养配合：</strong>训练配合饮食才能达到最佳效果</li>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <div style="text-align:center;color:#9ca3af;font-size:12px;padding:18px 0 0">
-    减脂教练 · v2.1
+    <section class="card">
+      <h3>💧 饮水指南</h3>
+      <div class="rule-list">
+        <li><strong>训练前：</strong>训练前 30 分钟喝 300–500ml 水</li>
+        <li><strong>训练中：</strong>每 15–20 分钟喝 100–150ml 水</li>
+        <li><strong>训练后：</strong>训练后补充 500–800ml 水</li>
+        <li><strong>日常：</strong>每天总饮水量达到 <span id="dailyWater">2.5L</span></li>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>💤 睡眠建议</h3>
+      <div class="rule-list">
+        <li><strong>睡眠时长：</strong>每天保证 7–9 小时睡眠</li>
+        <li><strong>入睡时间：</strong>建议 22:30–23:30 之间入睡</li>
+        <li><strong>睡眠质量：</strong>保持卧室黑暗、安静、凉爽</li>
+        <li><strong>睡前习惯：</strong>睡前 1 小时避免使用电子设备</li>
+      </div>
+    </section>
+  </div>
+
+  <div style="text-align:center;color:#9ca3af;font-size:12px;padding:18px 0 24px">
+    减脂教练 · v4.0
   </div>
 </main>
 
@@ -106,44 +331,81 @@
 <script src="shared.js"></script>
 <script>
 (function () {
-  // ============ 体重数据 ============
-  let weightLog = [];
+  var weightLog = [];
   try { weightLog = JSON.parse(localStorage.getItem('fit_weight_log') || '[]'); } catch(e) {}
   
-  const latestWeight = weightLog.length > 0 ? weightLog[weightLog.length - 1].weight : FIT.body.startWeight;
-  const startWeight = FIT.body.startWeight;
-  const targetMin = FIT.body.targetMin;
+  var latestWeight = weightLog.length > 0 ? weightLog[weightLog.length - 1].weight : FIT.body.startWeight;
+  var startWeight = FIT.body.startWeight;
+  var targetMin = FIT.body.targetMin;
   
-  const progress = Math.max(0, Math.min(100, 
-    ((startWeight - latestWeight) / (startWeight - targetMin)) * 100));
+  var progress = Math.max(0, Math.min(100, ((startWeight - latestWeight) / (startWeight - targetMin)) * 100));
   
   document.getElementById('weightRing').style.setProperty('--progress', progress + '%');
   document.getElementById('weightPct').textContent = Math.round(progress) + '%';
   document.getElementById('weightRange').textContent = startWeight + ' → ' + latestWeight + ' kg';
-
-  // ============ 最新体重显示 ============
-  const wEl = document.getElementById('hWeight');
-  if (weightLog.length) {
-    wEl.textContent = weightLog[weightLog.length - 1].weight;
-  } else {
-    wEl.textContent = FIT.body.startWeight;
-  }
-
-  // ============ 训练计划数 ============
-  if (FIT && FIT.weekly) {
-    document.getElementById('hPlans').textContent = FIT.weekly.length;
-  }
-
-  // ============ 今日训练显示 ============
-  const dayIdx = new Date().getDay();
-  const todayLabel = FIT.dayLabels[dayIdx];
-  document.getElementById('hExercise').textContent = todayLabel;
-
-  // ============ 今日训练卡片 ============
-  const todayKey = FIT.dayKeys[dayIdx];
-  const todayPlan = FIT.plans[todayKey] || FIT.plans.recovery;
+  document.getElementById('weightTarget').textContent = '目标 ' + targetMin + '–' + FIT.body.targetMax + 'kg';
   
-  const colors = {
+  document.getElementById('hWeight').textContent = latestWeight;
+  document.getElementById('hBMI').textContent = FIT.body.bmi;
+  document.getElementById('hCalories').textContent = FIT.metrics.calories;
+  document.getElementById('hProtein').textContent = FIT.metrics.protein;
+
+  document.getElementById('userName').textContent = FIT.body.gender === '男' ? '帅哥' : '美女';
+  var goalText = { lose: '🔥 减脂进行中', gain: '💪 增肌进行中', maintain: '⚖️ 维持身材', fit: '🏃 塑形中' };
+  document.getElementById('userGoal').textContent = goalText[FIT.body.goal] || '开始你的健身之旅';
+
+  document.getElementById('waterTarget').textContent = FIT.metrics.waterCount;
+  document.getElementById('proteinTarget').textContent = FIT.metrics.protein;
+  document.getElementById('sleepTarget').textContent = FIT.metrics.sleepHours;
+  document.getElementById('dailyWater').textContent = FIT.metrics.water;
+
+  function switchTab(tab) {
+    document.querySelectorAll('.content-tab-btn').forEach(function(el) { el.classList.remove('active'); });
+    document.querySelectorAll('.content-section').forEach(function(el) { el.classList.remove('active'); });
+    event.currentTarget.classList.add('active');
+    document.getElementById('tab-' + tab).classList.add('active');
+  }
+
+  var checkedItems = [];
+  try { checkedItems = JSON.parse(localStorage.getItem('fit_checklist') || '[]'); } catch(e) {}
+  
+  function toggleCheck(idx) {
+    if (checkedItems[idx]) {
+      checkedItems[idx] = false;
+    } else {
+      checkedItems[idx] = true;
+    }
+    localStorage.setItem('fit_checklist', JSON.stringify(checkedItems));
+    updateChecklist();
+  }
+
+  function updateChecklist() {
+    var items = document.querySelectorAll('.check-item');
+    var count = 0;
+    items.forEach(function(el, idx) {
+      if (checkedItems[idx]) {
+        el.classList.add('checked');
+        count++;
+      } else {
+        el.classList.remove('checked');
+      }
+    });
+    document.getElementById('checkProgress').textContent = count + '/' + items.length;
+  }
+
+  function resetChecklist() {
+    checkedItems = [];
+    localStorage.setItem('fit_checklist', '[]');
+    updateChecklist();
+  }
+
+  updateChecklist();
+
+  var dayIdx = new Date().getDay();
+  var todayKey = FIT.dayKeys[dayIdx];
+  var todayPlan = FIT.plans[todayKey] || FIT.plans.recovery;
+  
+  var colors = {
     pull: { bg: '#dbeafe', border: '#3b82f6', text: '#1e40af' },
     push: { bg: '#fef3c7', border: '#f59e0b', text: '#92400e' },
     leg: { bg: '#fee2e2', border: '#ef4444', text: '#991b1b' },
@@ -151,15 +413,16 @@
     recovery: { bg: '#ede9fe', border: '#a78bfa', text: '#6d28d9' },
     fullbody: { bg: '#fce7f3', border: '#ec4899', text: '#9d174d' }
   };
-  const color = colors[todayPlan.color] || colors.cardio;
+  var color = colors[todayPlan.color] || colors.cardio;
   
-  const trainingCard = document.getElementById('todayTrainingCard');
+  var trainingCard = document.getElementById('todayTrainingCard');
   if (todayPlan.moves && todayPlan.moves.length > 0) {
     trainingCard.innerHTML =
       '<div style="background:' + color.bg + ';border-left:4px solid ' + color.border + ';padding:12px;border-radius:var(--radius-sm)">' +
         '<div style="font-size:14px;font-weight:700;color:' + color.text + '">' + todayPlan.title + '</div>' +
         '<div style="font-size:12px;color:var(--sub);margin-top:4px">' + todayPlan.focus + '</div>' +
         '<div style="font-size:12px;color:var(--text-strong);margin-top:8px">动作数量：' + todayPlan.moves.length + ' 个</div>' +
+        '<a href="减脂训练日跟练_三分化.html" style="display:inline-block;margin-top:10px;color:#f97316;font-size:13px;font-weight:600">去训练 →</a>' +
       '</div>';
   } else {
     trainingCard.innerHTML =
@@ -169,22 +432,21 @@
       '</div>';
   }
 
-  // ============ 本周训练预告 ============
   function renderWeeklyPreview() {
-    const container = document.getElementById('weeklyPreview');
+    var container = document.getElementById('weeklyPreview');
     container.innerHTML = '';
     
     FIT.weekly.forEach(function(dayPlan, idx) {
-      const isToday = idx === dayIdx;
-      const dayOffset = idx - dayIdx;
-      let dayLabel = dayPlan.day;
+      var isToday = idx === dayIdx;
+      var dayOffset = idx - dayIdx;
+      var dayLabel = dayPlan.day;
       if (dayOffset === 0) dayLabel = '今天';
       else if (dayOffset === 1) dayLabel = '明天';
       else if (dayOffset === -1) dayLabel = '昨天';
       
-      const color = colors[dayPlan.color] || colors.cardio;
+      var color = colors[dayPlan.color] || colors.cardio;
       
-      const el = document.createElement('div');
+      var el = document.createElement('div');
       el.style.cssText = 
         'display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius-sm);' +
         'margin-bottom:6px;transition:all 0.2s;' +
@@ -205,22 +467,20 @@
   }
   renderWeeklyPreview();
 
-  // ============ 激励卡片 ============
-  const motivations = [
-    { icon: '🔥', text: '今天的汗水，是明天的勋章。', author: '健身格言' },
-    { icon: '💪', text: '成功不是将来才有的，而是从决定去做的那一刻起，持续累积而成。', author: '俞敏洪' },
-    { icon: '⭐', text: '你所做的事情，也许暂时看不到成果，但不要灰心或焦虑，你不是没有成长，而是在扎根。', author: '杨绛' },
-    { icon: '🏆', text: '自律的程度，决定了人生的高度。', author: '健身格言' },
-    { icon: '🌟', text: '每一个优秀的人，都有一段沉默的时光。那段时光，是付出了很多努力却得不到结果的日子，我们把它叫做扎根。', author: '健身格言' },
-    { icon: '🎯', text: '与其向往，不如出发。', author: '健身格言' },
-    { icon: '🌈', text: '坚持到底，胜利就在前方！', author: '健身格言' },
-    { icon: '⚡', text: '你的身体是你唯一的交通工具，好好保养它。', author: '健身格言' }
-  ];
-  
-  const randMotiv = motivations[Math.floor(Math.random() * motivations.length)];
-  document.getElementById('motivIcon').textContent = randMotiv.icon;
-  document.getElementById('motivText').textContent = randMotiv.text;
-  document.getElementById('motivAuthor').textContent = randMotiv.author;
+  var weekNotes = '';
+  try { weekNotes = localStorage.getItem('fit_week_notes') || ''; } catch(e) {}
+  document.getElementById('weekNotes').value = weekNotes;
+
+  function saveWeekNotes() {
+    var notes = document.getElementById('weekNotes').value;
+    localStorage.setItem('fit_week_notes', notes);
+    toast('笔记保存成功');
+  }
+
+  function editProfile() {
+    localStorage.removeItem('fit_onboarding_done');
+    window.location.href = 'onboarding.html';
+  }
 })();
 </script>
 </body>
