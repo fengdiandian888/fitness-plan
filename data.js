@@ -20,10 +20,10 @@ function loadUserProfile() {
     targetMin: 59,
     targetMax: 64,
     foodPrefs: {
-      meat: { chicken: 'like', beef: 'neutral', fish: 'like', shrimp: 'neutral', eggs: 'like', tofu: 'neutral' },
-      veg: { spinach: 'neutral', cucumber: 'like', tomato: 'like', broccoli: 'neutral', lettuce: 'neutral', cauliflower: 'neutral' },
-      staple: { rice: 'like', oats: 'neutral', corn: 'like', sweetpotato: 'like', pumpkin: 'neutral', quinoa: 'neutral' },
-      fruit: { apple: 'like', banana: 'neutral', orange: 'like', grapefruit: 'neutral', strawberry: 'like', blueberry: 'neutral' }
+      meat: { chicken: 'like', beef: 'neutral', fish: 'like', shrimp: 'neutral', eggs: 'like', tofu: 'neutral', leanpork: 'neutral', turkey: 'neutral' },
+      veg: { spinach: 'neutral', cucumber: 'like', tomato: 'like', broccoli: 'neutral', lettuce: 'neutral', cauliflower: 'neutral', asparagus: 'neutral', pea: 'neutral', bokchoy: 'neutral', leek: 'neutral', eggplant: 'neutral', bittermelon: 'neutral', okra: 'neutral', zucchini: 'neutral', 'chinese cabbage': 'neutral', carrot: 'neutral' },
+      staple: { rice: 'like', oats: 'neutral', corn: 'like', sweetpotato: 'like', pumpkin: 'neutral', quinoa: 'neutral', brownrice: 'neutral', buckwheat: 'neutral' },
+      fruit: { apple: 'like', banana: 'neutral', orange: 'like', grapefruit: 'neutral', strawberry: 'like', blueberry: 'neutral', peach: 'neutral', pear: 'neutral', watermelon: 'neutral', cantaloupe: 'neutral' }
     }
   };
   try {
@@ -180,6 +180,8 @@ const FIT = {
     }
   }
 };
+
+var userProfile = loadUserProfile();
 
 /* ============================================================
    视频链接注册表（v3.4 B站+YouTube+GIF三平台）

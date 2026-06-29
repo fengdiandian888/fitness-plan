@@ -309,6 +309,7 @@
         <small>增加肌肉量</small>
       </div>
       <div class="radio-option" onclick="selectGoal('maintain')" data-value="maintain">
+        <span>⚖️ 维持</span>
         <small>保持现有状态</small>
       </div>
       <div class="radio-option" onclick="selectGoal('fit')" data-value="fit">
@@ -346,12 +347,15 @@
 
   <!-- Step 4: 食物偏好 -->
   <div id="formStep4" class="card" style="display:none">
-    <h3>食物偏好</h3>
+    <div class="flex-between">
+      <h3>食物偏好</h3>
+      <span class="badge" style="background:#0ea5e9;color:#fff;font-size:11px">🌿 当季优先推荐</span>
+    </div>
     <div class="tab-bar">
-      <button class="active" onclick="switchFoodTab('meat')">🥩 肉类</button>
-      <button onclick="switchFoodTab('veg')">🥬 蔬菜</button>
-      <button onclick="switchFoodTab('staple')">🍚 主食</button>
-      <button onclick="switchFoodTab('fruit')">🍎 水果</button>
+      <button class="active" onclick="switchFoodTab('meat')">🥩 肉类 (8)</button>
+      <button onclick="switchFoodTab('veg')">🥬 蔬菜 (16)</button>
+      <button onclick="switchFoodTab('staple')">🍚 主食 (8)</button>
+      <button onclick="switchFoodTab('fruit')">🍎 水果 (10)</button>
     </div>
 
     <div id="foodMeat" class="food-content">
@@ -404,13 +408,29 @@
             <button class="dislike" onclick="setFoodPref('meat', 'tofu', 'dislike')">😕</button>
           </div>
         </div>
+        <div class="food-item" data-category="meat" data-item="leanpork">
+          <span class="food-name">瘦猪肉</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('meat', 'leanpork', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('meat', 'leanpork', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('meat', 'leanpork', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="meat" data-item="turkey">
+          <span class="food-name">火鸡肉</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('meat', 'turkey', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('meat', 'turkey', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('meat', 'turkey', 'dislike')">😕</button>
+          </div>
+        </div>
       </div>
     </div>
 
     <div id="foodVeg" class="food-content" style="display:none">
       <div class="food-category">
         <div class="food-item" data-category="veg" data-item="spinach">
-          <span class="food-name">菠菜</span>
+          <span class="food-name">菠菜 🌿</span>
           <div class="food-radio">
             <button class="like" onclick="setFoodPref('veg', 'spinach', 'like')">😊</button>
             <button class="neutral" onclick="setFoodPref('veg', 'spinach', 'neutral')">😐</button>
@@ -418,7 +438,7 @@
           </div>
         </div>
         <div class="food-item" data-category="veg" data-item="cucumber">
-          <span class="food-name">黄瓜</span>
+          <span class="food-name">黄瓜 🌿</span>
           <div class="food-radio">
             <button class="like" onclick="setFoodPref('veg', 'cucumber', 'like')">😊</button>
             <button class="neutral" onclick="setFoodPref('veg', 'cucumber', 'neutral')">😐</button>
@@ -426,7 +446,7 @@
           </div>
         </div>
         <div class="food-item" data-category="veg" data-item="tomato">
-          <span class="food-name">西红柿</span>
+          <span class="food-name">西红柿 🌿</span>
           <div class="food-radio">
             <button class="like" onclick="setFoodPref('veg', 'tomato', 'like')">😊</button>
             <button class="neutral" onclick="setFoodPref('veg', 'tomato', 'neutral')">😐</button>
@@ -442,7 +462,7 @@
           </div>
         </div>
         <div class="food-item" data-category="veg" data-item="lettuce">
-          <span class="food-name">生菜</span>
+          <span class="food-name">生菜 🌿</span>
           <div class="food-radio">
             <button class="like" onclick="setFoodPref('veg', 'lettuce', 'like')">😊</button>
             <button class="neutral" onclick="setFoodPref('veg', 'lettuce', 'neutral')">😐</button>
@@ -455,6 +475,86 @@
             <button class="like" onclick="setFoodPref('veg', 'cauliflower', 'like')">😊</button>
             <button class="neutral" onclick="setFoodPref('veg', 'cauliflower', 'neutral')">😐</button>
             <button class="dislike" onclick="setFoodPref('veg', 'cauliflower', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="veg" data-item="asparagus">
+          <span class="food-name">芦笋</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('veg', 'asparagus', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('veg', 'asparagus', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('veg', 'asparagus', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="veg" data-item="pea">
+          <span class="food-name">豌豆</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('veg', 'pea', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('veg', 'pea', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('veg', 'pea', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="veg" data-item="bokchoy">
+          <span class="food-name">小白菜</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('veg', 'bokchoy', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('veg', 'bokchoy', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('veg', 'bokchoy', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="veg" data-item="leek">
+          <span class="food-name">韭菜 🌿</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('veg', 'leek', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('veg', 'leek', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('veg', 'leek', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="veg" data-item="eggplant">
+          <span class="food-name">茄子 🌿</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('veg', 'eggplant', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('veg', 'eggplant', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('veg', 'eggplant', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="veg" data-item="bittermelon">
+          <span class="food-name">苦瓜 🌿</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('veg', 'bittermelon', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('veg', 'bittermelon', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('veg', 'bittermelon', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="veg" data-item="okra">
+          <span class="food-name">秋葵 🌿</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('veg', 'okra', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('veg', 'okra', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('veg', 'okra', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="veg" data-item="zucchini">
+          <span class="food-name">西葫芦 🌿</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('veg', 'zucchini', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('veg', 'zucchini', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('veg', 'zucchini', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="veg" data-item="chinese cabbage">
+          <span class="food-name">大白菜</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('veg', 'chinese cabbage', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('veg', 'chinese cabbage', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('veg', 'chinese cabbage', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="veg" data-item="carrot">
+          <span class="food-name">胡萝卜</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('veg', 'carrot', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('veg', 'carrot', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('veg', 'carrot', 'dislike')">😕</button>
           </div>
         </div>
       </div>
@@ -510,6 +610,22 @@
             <button class="dislike" onclick="setFoodPref('staple', 'quinoa', 'dislike')">😕</button>
           </div>
         </div>
+        <div class="food-item" data-category="staple" data-item="brownrice">
+          <span class="food-name">糙米</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('staple', 'brownrice', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('staple', 'brownrice', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('staple', 'brownrice', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="staple" data-item="buckwheat">
+          <span class="food-name">荞麦</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('staple', 'buckwheat', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('staple', 'buckwheat', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('staple', 'buckwheat', 'dislike')">😕</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -524,7 +640,7 @@
           </div>
         </div>
         <div class="food-item" data-category="fruit" data-item="banana">
-          <span class="food-name">香蕉</span>
+          <span class="food-name">香蕉 🌿</span>
           <div class="food-radio">
             <button class="like" onclick="setFoodPref('fruit', 'banana', 'like')">😊</button>
             <button class="neutral" onclick="setFoodPref('fruit', 'banana', 'neutral')">😐</button>
@@ -556,11 +672,43 @@
           </div>
         </div>
         <div class="food-item" data-category="fruit" data-item="blueberry">
-          <span class="food-name">蓝莓</span>
+          <span class="food-name">蓝莓 🌿</span>
           <div class="food-radio">
             <button class="like" onclick="setFoodPref('fruit', 'blueberry', 'like')">😊</button>
             <button class="neutral" onclick="setFoodPref('fruit', 'blueberry', 'neutral')">😐</button>
             <button class="dislike" onclick="setFoodPref('fruit', 'blueberry', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="fruit" data-item="peach">
+          <span class="food-name">桃子 🌿</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('fruit', 'peach', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('fruit', 'peach', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('fruit', 'peach', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="fruit" data-item="pear">
+          <span class="food-name">梨</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('fruit', 'pear', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('fruit', 'pear', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('fruit', 'pear', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="fruit" data-item="watermelon">
+          <span class="food-name">西瓜 🌿</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('fruit', 'watermelon', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('fruit', 'watermelon', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('fruit', 'watermelon', 'dislike')">😕</button>
+          </div>
+        </div>
+        <div class="food-item" data-category="fruit" data-item="cantaloupe">
+          <span class="food-name">哈密瓜 🌿</span>
+          <div class="food-radio">
+            <button class="like" onclick="setFoodPref('fruit', 'cantaloupe', 'like')">😊</button>
+            <button class="neutral" onclick="setFoodPref('fruit', 'cantaloupe', 'neutral')">😐</button>
+            <button class="dislike" onclick="setFoodPref('fruit', 'cantaloupe', 'dislike')">😕</button>
           </div>
         </div>
       </div>
