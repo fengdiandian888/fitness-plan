@@ -117,6 +117,14 @@ const FIT = {
     cacheTTL: 30 * 60 * 1000
   },
 
+  // ============ 当季蔬菜数据（中国南方）===========
+  seasonalVeg: {
+    spring: ['spinach', 'asparagus', 'pea', 'lettuce', 'bokchoy', 'leek'],
+    summer: ['cucumber', 'tomato', 'eggplant', 'bittermelon', 'okra', 'zucchini'],
+    autumn: ['broccoli', 'cauliflower', 'pumpkin', 'sweetpotato', 'chinese cabbage', 'carrot'],
+    winter: ['chinese cabbage', 'carrot', 'turnip', 'leek', 'lettuce', 'spinach']
+  },
+
   // ============ 食物营养数据库 ============
   foodDatabase: {
     meat: {
@@ -125,15 +133,28 @@ const FIT = {
       fish: { name: '鱼', protein: 20, calories: 100, weight: 100 },
       shrimp: { name: '虾', protein: 23, calories: 80, weight: 100 },
       eggs: { name: '鸡蛋', protein: 6, calories: 75, weight: 1 },
-      tofu: { name: '豆腐', protein: 8, calories: 70, weight: 100 }
+      tofu: { name: '豆腐', protein: 8, calories: 70, weight: 100 },
+      leanpork: { name: '瘦猪肉', protein: 20, calories: 143, weight: 100 },
+      turkey: { name: '火鸡肉', protein: 28, calories: 105, weight: 100 }
     },
     veg: {
-      spinach: { name: '菠菜', protein: 3, calories: 25, weight: 100 },
-      cucumber: { name: '黄瓜', protein: 1, calories: 15, weight: 100 },
-      tomato: { name: '西红柿', protein: 1, calories: 20, weight: 100 },
-      broccoli: { name: '西兰花', protein: 3, calories: 34, weight: 100 },
-      lettuce: { name: '生菜', protein: 1, calories: 16, weight: 100 },
-      cauliflower: { name: '菜花', protein: 2, calories: 25, weight: 100 }
+      spinach: { name: '菠菜', protein: 3, calories: 25, weight: 100, season: ['spring', 'winter'] },
+      cucumber: { name: '黄瓜', protein: 1, calories: 15, weight: 100, season: ['summer'] },
+      tomato: { name: '西红柿', protein: 1, calories: 20, weight: 100, season: ['summer'] },
+      broccoli: { name: '西兰花', protein: 3, calories: 34, weight: 100, season: ['autumn'] },
+      lettuce: { name: '生菜', protein: 1, calories: 16, weight: 100, season: ['spring', 'winter'] },
+      cauliflower: { name: '菜花', protein: 2, calories: 25, weight: 100, season: ['autumn'] },
+      asparagus: { name: '芦笋', protein: 3, calories: 20, weight: 100, season: ['spring'] },
+      pea: { name: '豌豆', protein: 5, calories: 81, weight: 100, season: ['spring'] },
+      bokchoy: { name: '小白菜', protein: 2, calories: 15, weight: 100, season: ['spring'] },
+      leek: { name: '韭菜', protein: 2, calories: 25, weight: 100, season: ['spring', 'winter'] },
+      eggplant: { name: '茄子', protein: 2, calories: 25, weight: 100, season: ['summer'] },
+      bittermelon: { name: '苦瓜', protein: 1, calories: 18, weight: 100, season: ['summer'] },
+      okra: { name: '秋葵', protein: 2, calories: 30, weight: 100, season: ['summer'] },
+      zucchini: { name: '西葫芦', protein: 1, calories: 17, weight: 100, season: ['summer'] },
+      chinese cabbage: { name: '大白菜', protein: 1, calories: 18, weight: 100, season: ['autumn', 'winter'] },
+      carrot: { name: '胡萝卜', protein: 1, calories: 41, weight: 100, season: ['autumn', 'winter'] },
+      turnip: { name: '白萝卜', protein: 1, calories: 20, weight: 100, season: ['winter'] }
     },
     staple: {
       rice: { name: '米饭', protein: 2, calories: 130, weight: 100 },
@@ -141,15 +162,21 @@ const FIT = {
       corn: { name: '玉米', protein: 3, calories: 86, weight: 100 },
       sweetpotato: { name: '红薯', protein: 1, calories: 86, weight: 100 },
       pumpkin: { name: '南瓜', protein: 1, calories: 26, weight: 100 },
-      quinoa: { name: '藜麦', protein: 4, calories: 368, weight: 100 }
+      quinoa: { name: '藜麦', protein: 4, calories: 368, weight: 100 },
+      brownrice: { name: '糙米', protein: 3, calories: 111, weight: 100 },
+      buckwheat: { name: '荞麦', protein: 4, calories: 340, weight: 100 }
     },
     fruit: {
-      apple: { name: '苹果', protein: 0.3, calories: 52, weight: 100 },
-      banana: { name: '香蕉', protein: 1, calories: 89, weight: 100 },
-      orange: { name: '橙子', protein: 1, calories: 47, weight: 100 },
-      grapefruit: { name: '柚子', protein: 0.7, calories: 42, weight: 100 },
-      strawberry: { name: '草莓', protein: 0.7, calories: 32, weight: 100 },
-      blueberry: { name: '蓝莓', protein: 0.7, calories: 57, weight: 100 }
+      apple: { name: '苹果', protein: 0.3, calories: 52, weight: 100, season: ['autumn', 'winter'] },
+      banana: { name: '香蕉', protein: 1, calories: 89, weight: 100, season: ['year'] },
+      orange: { name: '橙子', protein: 1, calories: 47, weight: 100, season: ['winter'] },
+      grapefruit: { name: '柚子', protein: 0.7, calories: 42, weight: 100, season: ['autumn', 'winter'] },
+      strawberry: { name: '草莓', protein: 0.7, calories: 32, weight: 100, season: ['spring'] },
+      blueberry: { name: '蓝莓', protein: 0.7, calories: 57, weight: 100, season: ['summer'] },
+      peach: { name: '桃子', protein: 0.9, calories: 42, weight: 100, season: ['summer'] },
+      pear: { name: '梨', protein: 0.4, calories: 58, weight: 100, season: ['autumn'] },
+      watermelon: { name: '西瓜', protein: 0.6, calories: 30, weight: 100, season: ['summer'] },
+      cantaloupe: { name: '哈密瓜', protein: 0.8, calories: 34, weight: 100, season: ['summer'] }
     }
   }
 };
@@ -888,22 +915,41 @@ function extractTomorrow(d) {
   };
 }
 
+// ============ 获取当前季节 ============
+function getCurrentSeason() {
+  var month = new Date().getMonth() + 1;
+  if (month >= 3 && month <= 5) return 'spring';
+  if (month >= 6 && month <= 8) return 'summer';
+  if (month >= 9 && month <= 11) return 'autumn';
+  return 'winter';
+}
+
 // ============ 个性化饮食方案生成 ============
 function generatePersonalizedDiet() {
-  var prefs = userProfile.foodPrefs || FIT.foodDatabase;
+  var prefs = userProfile.foodPrefs || {};
+  var currentSeason = getCurrentSeason();
   
   function getPreferredItems(category) {
     var items = [];
     for (var key in FIT.foodDatabase[category]) {
       var pref = prefs[category] && prefs[category][key] || 'neutral';
-      if (pref !== 'dislike') {
-        items.push({ key: key, pref: pref, data: FIT.foodDatabase[category][key] });
+      if (pref === 'dislike') continue;
+      
+      var itemData = FIT.foodDatabase[category][key];
+      var isSeasonal = false;
+      if (itemData.season) {
+        isSeasonal = itemData.season.includes(currentSeason) || itemData.season.includes('year');
       }
+      
+      var weight = 0;
+      if (pref === 'like') weight += 100;
+      else if (pref === 'neutral') weight += 50;
+      if (isSeasonal) weight += 30;
+      
+      items.push({ key: key, pref: pref, data: itemData, weight: weight, isSeasonal: isSeasonal });
     }
     items.sort(function(a, b) {
-      if (a.pref === 'like' && b.pref !== 'like') return -1;
-      if (b.pref === 'like' && a.pref !== 'like') return 1;
-      return 0;
+      return b.weight - a.weight;
     });
     return items;
   }
@@ -913,16 +959,34 @@ function generatePersonalizedDiet() {
   var stapleItems = getPreferredItems('staple');
   var fruitItems = getPreferredItems('fruit');
   
+  function getItemByPriority(items, index) {
+    if (!items || items.length === 0) return null;
+    var likeItems = items.filter(function(i) { return i.pref === 'like'; });
+    var neutralItems = items.filter(function(i) { return i.pref !== 'like'; });
+    
+    if (index < likeItems.length) return likeItems[index];
+    return neutralItems[index - likeItems.length] || items[index] || items[0];
+  }
+  
   var proteinTarget = userProfile.protein || FIT.metrics.protein;
   var breakfastProtein = Math.round(proteinTarget * 0.27);
   var lunchProtein = Math.round(proteinTarget * 0.33);
   var dinnerProtein = Math.round(proteinTarget * 0.40);
   
-  var mainMeat = meatItems[0] || meatItems[1] || meatItems[2];
-  var altMeat = meatItems.length > 1 ? meatItems[1] : meatItems[0];
+  var breakfastMeat = getItemByPriority(meatItems, 0);
+  var lunchMeat = getItemByPriority(meatItems, 0);
+  var dinnerMeat = getItemByPriority(meatItems, 1);
+  
+  var breakfastStaple = getItemByPriority(stapleItems, 0);
+  var lunchStaple = getItemByPriority(stapleItems, 0);
+  var dinnerStaple = getItemByPriority(stapleItems, 1);
+  
+  var lunchVeg = getItemByPriority(vegItems, 0);
+  var dinnerVeg = getItemByPriority(vegItems, 1);
+  var breakfastFruit = getItemByPriority(fruitItems, 0);
   
   function calcMeatPortion(proteinNeeded, meat) {
-    if (!meat) return { weight: 0, protein: 0, calories: 0 };
+    if (!meat) return { weight: 0, protein: 0, calories: 0, name: '鸡蛋' };
     var per100g = meat.data.protein;
     var weight = Math.round((proteinNeeded / per100g) * 100);
     return {
@@ -933,28 +997,42 @@ function generatePersonalizedDiet() {
     };
   }
   
+  function calcStaplePortion(staple, weight) {
+    if (!staple) return { name: '米饭', weight: weight, calories: Math.round((weight / 100) * 130) };
+    return {
+      name: staple.data.name,
+      weight: weight,
+      calories: Math.round((weight / 100) * staple.data.calories)
+    };
+  }
+  
   return {
+    season: currentSeason,
+    seasonName: { spring: '春季', summer: '夏季', autumn: '秋季', winter: '冬季' }[currentSeason],
     breakfast: {
-      meat: calcMeatPortion(breakfastProtein, { data: { name: '鸡蛋', protein: 6, calories: 75, weight: 1 } }),
-      meatQty: Math.round(breakfastProtein / 6),
-      meatName: '鸡蛋',
-      staple: { name: stapleItems[0].data.name, weight: 30, calories: Math.round((30 / 100) * stapleItems[0].data.calories) },
-      fruit: fruitItems.length > 0 ? fruitItems[0].data.name : '苹果'
+      meat: calcMeatPortion(breakfastProtein, breakfastMeat),
+      meatQty: breakfastMeat && breakfastMeat.key === 'eggs' ? Math.round(breakfastProtein / 6) : 0,
+      meatName: breakfastMeat ? breakfastMeat.data.name : '鸡蛋',
+      staple: calcStaplePortion(breakfastStaple, 30),
+      fruit: breakfastFruit ? breakfastFruit.data.name : '苹果'
     },
     lunch: {
-      meat: calcMeatPortion(lunchProtein, mainMeat),
-      staple: { name: stapleItems[0].data.name, weight: 100, calories: Math.round((100 / 100) * stapleItems[0].data.calories) },
-      veg: vegItems.length > 0 ? vegItems[0].data.name : '菠菜'
+      meat: calcMeatPortion(lunchProtein, lunchMeat),
+      staple: calcStaplePortion(lunchStaple, 100),
+      veg: lunchVeg ? lunchVeg.data.name : '菠菜',
+      vegSeasonal: lunchVeg ? lunchVeg.isSeasonal : false
     },
     dinner: {
-      meat: calcMeatPortion(dinnerProtein, altMeat),
-      veg: vegItems.length > 1 ? vegItems[1].data.name : (vegItems[0] ? vegItems[0].data.name : '黄瓜'),
-      carb: { name: stapleItems.length > 1 ? stapleItems[1].data.name : stapleItems[0].data.name, weight: 80, calories: Math.round((80 / 100) * (stapleItems.length > 1 ? stapleItems[1].data.calories : stapleItems[0].data.calories)) }
+      meat: calcMeatPortion(dinnerProtein, dinnerMeat),
+      veg: dinnerVeg ? dinnerVeg.data.name : '黄瓜',
+      vegSeasonal: dinnerVeg ? dinnerVeg.isSeasonal : false,
+      carb: calcStaplePortion(dinnerStaple, 80)
     },
-    preferredMeats: meatItems.slice(0, 3).map(function(i) { return i.data.name; }),
-    preferredVegs: vegItems.slice(0, 4).map(function(i) { return i.data.name; }),
-    preferredStaples: stapleItems.slice(0, 3).map(function(i) { return i.data.name; }),
-    preferredFruits: fruitItems.slice(0, 3).map(function(i) { return i.data.name; })
+    preferredMeats: meatItems.slice(0, 4).map(function(i) { return { name: i.data.name, pref: i.pref, seasonal: i.isSeasonal }; }),
+    preferredVegs: vegItems.slice(0, 5).map(function(i) { return { name: i.data.name, pref: i.pref, seasonal: i.isSeasonal }; }),
+    preferredStaples: stapleItems.slice(0, 4).map(function(i) { return { name: i.data.name, pref: i.pref }; }),
+    preferredFruits: fruitItems.slice(0, 4).map(function(i) { return { name: i.data.name, pref: i.pref, seasonal: i.isSeasonal }; }),
+    seasonalVegList: FIT.seasonalVeg[currentSeason] || []
   };
 }
 

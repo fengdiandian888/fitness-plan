@@ -157,6 +157,10 @@
           <div style="font-size:10px;color:#15803d">升</div>
         </div>
       </div>
+      <div style="margin-top:12px;padding:10px;background:#fef9c3;border-radius:var(--radius-sm);display:flex;align-items:center;gap:8px">
+        <span>🌿</span>
+        <span style="font-size:12px;color:#854d0e">当前季节：<span id="currentSeason">夏季</span>，推荐当季蔬菜</span>
+      </div>
     </section>
 
     <section class="card">
@@ -244,23 +248,41 @@
 
     <section class="card">
       <h3>🎯 你的偏好食材</h3>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-        <div>
-          <div style="font-size:12px;color:var(--sub);margin-bottom:4px">🥩 肉类偏好</div>
-          <div style="font-size:13px;color:var(--text-strong)" id="prefMeats">鸡胸肉、鱼、鸡蛋</div>
+      <div style="font-size:11px;color:var(--sub);margin-bottom:10px">
+        <span class="badge" style="background:#22c55e;color:#fff;font-size:10px;margin-right:4px">喜欢</span>高频率安排
+        <span class="badge" style="background:#f59e0b;color:#fff;font-size:10px;margin-right:4px;margin-left:8px">能接受</span>适当安排
+        <span class="badge" style="background:#ef4444;color:#fff;font-size:10px;margin-left:8px">不喜欢</span>不安排
+        <span class="badge" style="background:#0ea5e9;color:#fff;font-size:10px;margin-left:8px">🌿</span>当季
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div style="background:#f8fafc;border-radius:var(--radius-sm);padding:10px">
+          <div style="font-size:12px;color:var(--sub);margin-bottom:6px">🥩 肉类</div>
+          <div id="prefMeats" style="font-size:12px;line-height:1.6"></div>
         </div>
-        <div>
-          <div style="font-size:12px;color:var(--sub);margin-bottom:4px">🥬 蔬菜偏好</div>
-          <div style="font-size:13px;color:var(--text-strong)" id="prefVegs">黄瓜、西红柿、菠菜</div>
+        <div style="background:#f8fafc;border-radius:var(--radius-sm);padding:10px">
+          <div style="font-size:12px;color:var(--sub);margin-bottom:6px">🥬 蔬菜</div>
+          <div id="prefVegs" style="font-size:12px;line-height:1.6"></div>
         </div>
-        <div>
-          <div style="font-size:12px;color:var(--sub);margin-bottom:4px">🍚 主食偏好</div>
-          <div style="font-size:13px;color:var(--text-strong)" id="prefStaples">米饭、玉米、红薯</div>
+        <div style="background:#f8fafc;border-radius:var(--radius-sm);padding:10px">
+          <div style="font-size:12px;color:var(--sub);margin-bottom:6px">🍚 主食</div>
+          <div id="prefStaples" style="font-size:12px;line-height:1.6"></div>
         </div>
-        <div>
-          <div style="font-size:12px;color:var(--sub);margin-bottom:4px">🍎 水果偏好</div>
-          <div style="font-size:13px;color:var(--text-strong)" id="prefFruits">苹果、橙子、草莓</div>
+        <div style="background:#f8fafc;border-radius:var(--radius-sm);padding:10px">
+          <div style="font-size:12px;color:var(--sub);margin-bottom:6px">🍎 水果</div>
+          <div id="prefFruits" style="font-size:12px;line-height:1.6"></div>
         </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>🌿 当季推荐蔬菜</h3>
+      <div id="seasonalVegList" style="display:flex;flex-wrap:wrap;gap:8px">
+        <span class="badge" style="background:#0ea5e9;color:#fff">黄瓜</span>
+        <span class="badge" style="background:#0ea5e9;color:#fff">西红柿</span>
+        <span class="badge" style="background:#0ea5e9;color:#fff">茄子</span>
+      </div>
+      <div style="margin-top:10px;padding:8px;background:#e0f2fe;border-radius:var(--radius-sm);font-size:12px;color:#0369a1">
+        💡 当季蔬菜新鲜度高、营养丰富、价格实惠，优先选择
       </div>
     </section>
   </div>
@@ -550,12 +572,26 @@
     document.getElementById('dailyProtein').textContent = FIT.metrics.protein;
     document.getElementById('dailyWater').textContent = FIT.metrics.water;
     
+    document.getElementById('currentSeason').textContent = diet.seasonName;
+    
+    function getPrefBadge(pref, seasonal) {
+      var badge = '';
+      if (pref === 'like') badge = '<span style="background:#22c55e;color:#fff;font-size:10px;padding:1px 4px;border-radius:3px;margin-left:4px">喜欢</span>';
+      else if (pref === 'neutral') badge = '<span style="background:#f59e0b;color:#fff;font-size:10px;padding:1px 4px;border-radius:3px;margin-left:4px">能接受</span>';
+      if (seasonal) badge += '<span style="background:#0ea5e9;color:#fff;font-size:10px;padding:1px 4px;border-radius:3px;margin-left:4px">🌿</span>';
+      return badge;
+    }
+    
+    function getSeasonalBadge(isSeasonal) {
+      return isSeasonal ? '<span style="background:#0ea5e9;color:#fff;font-size:10px;padding:1px 4px;border-radius:3px;margin-left:4px">当季</span>' : '';
+    }
+    
     var breakfastHtml = 
       '<div class="ref-food-row">' +
         '<div class="ref-food-icon">🥚</div>' +
         '<div class="ref-food-info">' +
           '<div class="ref-food-title">' + diet.breakfast.meatName + '</div>' +
-          '<div class="ref-food-desc">' + diet.breakfast.meatQty + '个（蛋白质约' + (diet.breakfast.meatQty * 6) + 'g）</div>' +
+          '<div class="ref-food-desc">' + (diet.breakfast.meatQty > 0 ? diet.breakfast.meatQty + '个' : diet.breakfast.meat.weight + 'g') + '（蛋白质约' + diet.breakfast.meat.protein + 'g）</div>' +
         '</div>' +
       '</div>' +
       '<div class="ref-food-row">' +
@@ -593,7 +629,7 @@
       '<div class="ref-food-row">' +
         '<div class="ref-food-icon">🥬</div>' +
         '<div class="ref-food-info">' +
-          '<div class="ref-food-title">' + diet.lunch.veg + '</div>' +
+          '<div class="ref-food-title">' + diet.lunch.veg + getSeasonalBadge(diet.lunch.vegSeasonal) + '</div>' +
           '<div class="ref-food-desc">200g</div>' +
         '</div>' +
       '</div>';
@@ -611,7 +647,7 @@
       '<div class="ref-food-row">' +
         '<div class="ref-food-icon">🥦</div>' +
         '<div class="ref-food-info">' +
-          '<div class="ref-food-title">' + diet.dinner.veg + '</div>' +
+          '<div class="ref-food-title">' + diet.dinner.veg + getSeasonalBadge(diet.dinner.vegSeasonal) + '</div>' +
           '<div class="ref-food-desc">300g</div>' +
         '</div>' +
       '</div>' +
@@ -625,10 +661,19 @@
     
     document.getElementById('dinnerContent').innerHTML = dinnerHtml;
     
-    document.getElementById('prefMeats').textContent = diet.preferredMeats.join('、');
-    document.getElementById('prefVegs').textContent = diet.preferredVegs.join('、');
-    document.getElementById('prefStaples').textContent = diet.preferredStaples.join('、');
-    document.getElementById('prefFruits').textContent = diet.preferredFruits.join('、');
+    document.getElementById('prefMeats').innerHTML = diet.preferredMeats.map(function(i) { return i.name + getPrefBadge(i.pref, i.seasonal); }).join('<br>');
+    document.getElementById('prefVegs').innerHTML = diet.preferredVegs.map(function(i) { return i.name + getPrefBadge(i.pref, i.seasonal); }).join('<br>');
+    document.getElementById('prefStaples').innerHTML = diet.preferredStaples.map(function(i) { return i.name + getPrefBadge(i.pref, false); }).join('<br>');
+    document.getElementById('prefFruits').innerHTML = diet.preferredFruits.map(function(i) { return i.name + getPrefBadge(i.pref, i.seasonal); }).join('<br>');
+    
+    var seasonalVegHtml = '';
+    diet.seasonalVegList.forEach(function(vegKey) {
+      var vegData = FIT.foodDatabase.veg[vegKey];
+      if (vegData) {
+        seasonalVegHtml += '<span class="badge" style="background:#0ea5e9;color:#fff">' + vegData.name + '</span>';
+      }
+    });
+    document.getElementById('seasonalVegList').innerHTML = seasonalVegHtml;
   }
 
   renderPersonalizedDiet();
