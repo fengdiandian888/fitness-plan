@@ -303,7 +303,6 @@
 
   // =========== 启动 ===========
   function init() {
-    renderTabBar();
     renderBottomNav();
     setupBiliVideos();
     setupSubtabs('body');
