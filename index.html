@@ -126,11 +126,11 @@
   </section>
 
   <div class="content-tabs">
-    <button class="content-tab-btn active" onclick="switchTab('diet')">🍽️ 饮食参考</button>
-    <button class="content-tab-btn" onclick="switchTab('checklist')">✅ 必做清单</button>
-    <button class="content-tab-btn" onclick="switchTab('training')">💪 本周训练</button>
-    <button class="content-tab-btn" onclick="switchTab('summary')">📊 每周小结</button>
-    <button class="content-tab-btn" onclick="switchTab('tutorial')">📚 健身教程</button>
+    <button class="content-tab-btn active" onclick="switchTab('diet', this)">🍽️ 饮食参考</button>
+    <button class="content-tab-btn" onclick="switchTab('checklist', this)">✅ 必做清单</button>
+    <button class="content-tab-btn" onclick="switchTab('training', this)">💪 本周训练</button>
+    <button class="content-tab-btn" onclick="switchTab('summary', this)">📊 每周小结</button>
+    <button class="content-tab-btn" onclick="switchTab('tutorial', this)">📚 健身教程</button>
   </div>
 
   <!-- 饮食参考 -->
@@ -410,6 +410,21 @@
   </div>
 </main>
 
+<script>
+window.onerror = function(msg, url, line, col, error) {
+  var errDiv = document.createElement('div');
+  errDiv.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#ef4444;color:#fff;padding:12px;font-size:13px;z-index:9999;white-space:pre-wrap;';
+  errDiv.textContent = '错误: ' + msg + '\n文件: ' + url + '\n行: ' + line + ':' + col;
+  document.body.appendChild(errDiv);
+  return true;
+};
+window.addEventListener('unhandledrejection', function(e) {
+  var errDiv = document.createElement('div');
+  errDiv.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#f59e0b;color:#fff;padding:12px;font-size:13px;z-index:9999;white-space:pre-wrap;';
+  errDiv.textContent = 'Promise错误: ' + (e.reason && e.reason.message || e.reason);
+  document.body.appendChild(errDiv);
+});
+</script>
 <script src="data.js"></script>
 <script src="shared.js"></script>
 <script>
@@ -442,11 +457,13 @@
   document.getElementById('sleepTarget').textContent = FIT.metrics.sleepHours;
   document.getElementById('dailyWater').textContent = FIT.metrics.water;
 
-  window.switchTab = function(tab) {
-    document.querySelectorAll('.content-tab-btn').forEach(function(el) { el.classList.remove('active'); });
-    document.querySelectorAll('.content-section').forEach(function(el) { el.classList.remove('active'); });
-    event.currentTarget.classList.add('active');
-    document.getElementById('tab-' + tab).classList.add('active');
+  window.switchTab = function(tab, el) {
+    document.querySelectorAll('.content-tab-btn').forEach(function(btn) { btn.classList.remove('active'); });
+    document.querySelectorAll('.content-section').forEach(function(sec) { sec.classList.remove('active'); });
+    if (el) el.classList.add('active');
+    else document.querySelector('.content-tab-btn[onclick*="' + tab + '"]').classList.add('active');
+    var targetTab = document.getElementById('tab-' + tab);
+    if (targetTab) targetTab.classList.add('active');
   };
 
   var checkedItems = [];
